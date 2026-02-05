@@ -1,0 +1,60 @@
+{
+ "name": "@digitalcredentials/issuer-dashboard",
+ "description": "A nextjs app for managing Verifiable Credential issuance, revocation, and reporting.",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --turbopack",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@tailwindcss/forms": "^0.5.10",
+    "autoprefixer": "10.4.20",
+    "bcrypt": "^5.1.1",
+    "clsx": "^2.1.1",
+    "next": "latest",
+    "next-auth": "5.0.0-beta.30",
+    "postcss": "8.5.1",
+    "postgres": "^3.4.6",
+    "react": "latest",
+    "react-dom": "latest",
+    "tailwindcss": "3.4.17",
+    "typescript": "5.7.3",
+    "use-debounce": "^10.0.4",
+    "zod": "^3.25.17"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "22.10.7",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "sharp"
+    ]
+  },
+  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67",
+    "keywords": [
+    "dcc"
+  ],
+  "engines": {
+    "node": ">=20.0"
+  },
+  "author": {
+    "name": "Digital Credentials Consortium",
+    "url": "https://github.com/digitalcredentials/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digitalcredentials/issuer-dashboard"
+  },
+  "homepage": "https://github.com/digitalcredentials/issuer-dashboard",
+  "bugs": "https://github.com/digitalcredentials/issuer-dashboard/issues"
+}
