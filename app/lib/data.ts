@@ -21,8 +21,6 @@ export async function fetchLatestBatches() {
   }
 }
 
-
-
 const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredCredentials(
   queryTerm: string,
@@ -37,8 +35,20 @@ export async function fetchFilteredCredentials(
   }
 }
 
-export async function fetchCredentialsPages(queryTerm: string) {
+export async function fetchFilteredHolders(
+  queryTerm: string,
+  currentPage: number,
+) {
+  try {
+    const response = await callStore('holders/query','POST', {queryTerm, currentPage});
+    return response.holders;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch holders.');
+  }
+}
 
+export async function fetchCredentialsPages(queryTerm: string) {
   try {
     const count = await callStore('credentials/count', 'POST', {queryTerm});
     const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
@@ -49,6 +59,17 @@ export async function fetchCredentialsPages(queryTerm: string) {
   }
 }
 
+export async function fetchHoldersPages(queryTerm: string) {
+  try {
+    const count = await callStore('holders/count', 'POST', {queryTerm});
+    const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of holders.');
+  }
+}
+
 export async function fetchCredentialById(id: string) {
   try {
     const credential = await callStore(`credential/${id}`, 'GET');
@@ -56,6 +77,16 @@ export async function fetchCredentialById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch credential.');
+  }
+}
+
+export async function fetchHolderById(id: string) {
+  try {
+    const holder = await callStore(`holder/${id}`, 'GET');
+    return holder;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch holder.');
   }
 }
 
