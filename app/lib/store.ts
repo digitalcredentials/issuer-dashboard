@@ -2,11 +2,12 @@
 
 type queryBody = {queryTerm:string,currentPage?:number};
 type credBody = {holder_name:string,holder_email:string,cred_name: string, added_by?: string}
-type storeBody = queryBody | credBody
+type holderBody = {name:string, email:string, did: string, org_id: string}
+type storeBody = queryBody | credBody | holderBody
 
 export const callStore = async (path : string, method: string, body?: storeBody) => {
     console.log("the url:")
-    console.log(path)
+    console.log
   try {
     const response = (method === 'GET') ?
         await fetch(`http://localhost:3000/${path}`)
