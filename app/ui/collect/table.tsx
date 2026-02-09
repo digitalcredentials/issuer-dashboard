@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { formatDateToLocal } from '@/app/lib/utils';
-import { fetchFilteredCredentials } from '@/app/lib/data';
+import { fetchHolderCredsById } from '@/app/lib/data';
 import { PlusIcon } from '@heroicons/react/24/outline';
 
 export function SelectCredential({id}:{id:string}) {
@@ -22,7 +22,8 @@ export default async function CredentialsTable({
   query: string;
   currentPage: number;
 }) {
-  const credentials = await fetchFilteredCredentials(query, currentPage);
+  const holderId = '4'
+  const credentials = await fetchHolderCredsById(holderId, query, currentPage);
 
   return (
     <div className="mt-6 flow-root">
