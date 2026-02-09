@@ -4,7 +4,7 @@ import Table from '@/app/ui/collect/table';
 import { lusitana } from '@/app/ui/fonts';
 import { CredentialsTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
-import { fetchCredentialsPages } from '@/app/lib/data';
+import { fetchHolderCredsPages } from '@/app/lib/data';
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -15,7 +15,8 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchCredentialsPages(query);
+  const holderOrgId = '4'
+  const totalPages = await fetchHolderCredsPages(holderOrgId, query);
   return (
     <main className ="p-4">
       <h1 className={`${lusitana.className} text-2xl p-4`}>You have the following credentials. Select one to download.</h1>
@@ -50,7 +51,7 @@ export default async function Page(props: {
                   htmlFor="pending"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
-                  Don't include email address
+                  Don&apos;t include email address
                 </label>
               </div>
               <div className="flex items-center">
@@ -138,7 +139,7 @@ export default async function Page(props: {
                   htmlFor="paid"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
-                  Deliver to your web wallet's inbox
+                  Deliver to your web wallet inbox
                 </label>
               </div>
 
