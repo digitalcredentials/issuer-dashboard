@@ -72,3 +72,11 @@ export type CredentialForm = {
   holder_email: string;
   status: 'pending' | 'collected' | 'pending' | 'notified' | 'deactivated';
 };
+
+export type HolderForm = {
+  id: string;
+  org_id: string;
+  name: string;
+  email: string;
+  did: string;
+};
