@@ -67,8 +67,12 @@ export async function createHolder(prevState: State, formData: FormData) {
 }
 
 
+export async function deleteHolder(id: string) {
+    // TODO: not sure if we even want to allow deletions
+     throw new Error('Deletion not allowed');
 
-
+ // revalidatePath('/dashboard/holders');
+}
 
 export async function updateHolder(
   id: string,
