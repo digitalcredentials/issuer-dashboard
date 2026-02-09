@@ -52,7 +52,7 @@ export async function createHolder(prevState: State, formData: FormData) {
   const { orgId, email, name, did } = validatedFields.data;
  
   try {
-    const result = callStore('holder', 'POST', {email, name, did, org_id: orgId})
+    const result = await callStore('holder', 'POST', {email, name, did, org_id: orgId})
     // TODO: want to directly deal with 404's using notFound()
   } catch (error) {
     // We'll also log the error to the console for now
@@ -96,7 +96,7 @@ export async function updateHolder(
   const { did, email, name, orgId } = validatedFields.data;
  
   try {
-     const result = callStore(`holder/${id}`, 'PUT', {email, name, org_id: orgId, did})
+     const result = await callStore(`holder/${id}`, 'PUT', {email, name, org_id: orgId, did})
   } catch (error) {
     return { message: 'Database Error: Failed to update holder.' };
   }
