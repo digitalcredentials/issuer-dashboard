@@ -1,4 +1,4 @@
-import Pagination from '@/app/ui/credentials/pagination';
+import Pagination from '@/app/ui/pagination';
 import Search from '@/app/ui/search';
 import Table from '@/app/ui/credentials/table';
 import { CreateCredential } from '@/app/ui/credentials/buttons';
