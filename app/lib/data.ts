@@ -90,6 +90,31 @@ export async function fetchHolderById(id: string) {
   }
 }
 
+export async function fetchHolderCredsById(
+  id: string,
+  queryTerm: string,
+  currentPage: number
+) {
+  try {
+    const response = await callStore(`holder/credentials/${id}`,'POST', {queryTerm, currentPage});
+    return response.credentials;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch holder credentials.');
+  }
+}
+
+export async function fetchHolderCredsPages(id: string, queryTerm: string) {
+  try {
+    const count = await callStore('holder/credentials/count/${id}', 'POST', {queryTerm});
+    const totalPages = Math.ceil(Number(count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of holder credentials.');
+  }
+}
+
 export async function fetchAllTemplates() {
   try {
     const templates = await callStore(`templates`, 'GET');
