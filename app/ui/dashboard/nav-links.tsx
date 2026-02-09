@@ -23,6 +23,11 @@ const links = [
     href: '/dashboard/templates',
     icon: DocumentDuplicateIcon,
   },
+  {
+    name: 'Holders',
+    href: '/dashboard/holders',
+    icon: UserGroupIcon,
+  },
   { name: 'Credential Settings', href: '/dashboard/configuration', icon: UserGroupIcon },
   { name: 'Email Settings', href: '/dashboard/email', icon: UserGroupIcon },
   { name: 'Upload Credentials', href: '/dashboard/upload', icon: UserGroupIcon },
