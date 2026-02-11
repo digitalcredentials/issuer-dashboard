@@ -13,7 +13,7 @@ and we then check that the user owns the Credential, then get the data from the 
 construct and populate the VC, then sign it, or exchange it
 */
 
-const FormSchema = z.object({
+/* const FormSchema = z.object({
   //holderId: z.string(),
   credId: z.string({
     invalid_type_error: 'Please select a credential.',
@@ -24,6 +24,13 @@ const FormSchema = z.object({
   deliveryFormat: z.enum(['plainVC', 'deepLink', 'chapi', 'pdf', ''], {
     invalid_type_error: 'Please select a delivery format.',
   })
+}); */
+
+const FormSchema = z.object({
+  //holderId: z.string(),
+  credId: z.string(),
+  shouldIncludeEmail: z.string(),
+  deliveryFormat: z.string()
 });
  
 export type State = {
@@ -33,10 +40,12 @@ export type State = {
     deliveryFormat?: string[];
   };
   message?: string | null;
+  vc?: object;
 };
 
 export async function collectCredential(prevState: State, formData: FormData) {
-
+  console.log("in the collect credential")
+  console.log("formData", formData)
     const session = await auth(); // Get the current session
     let userName;
     if (!session?.user) {
@@ -62,8 +71,8 @@ export async function collectCredential(prevState: State, formData: FormData) {
  // TODO: want to directly deal with 404's from the signing service using notFound()
   try {
     // TODO: replace username, which for now is the email address of whoever is logged in, with organizational id.
-    const result = await sign({holderId: userName, credId, shouldIncludeEmail, deliveryFormat})
-    return result;
+    const result = await sign({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
+    return {vc: result}
   } catch (error) {
     // We'll also log the error to the console for now
     console.error(error);
