@@ -26,8 +26,6 @@ const FormSchema = z.object({
   })
 });
  
-//const GetSignedCredential = FormSchema.omit({ holderId: true });
-
 export type State = {
   errors?: {
     credId?: string[];
@@ -37,7 +35,7 @@ export type State = {
   message?: string | null;
 };
 
-export async function createCredential(prevState: State, formData: FormData) {
+export async function collectCredential(prevState: State, formData: FormData) {
 
     const session = await auth(); // Get the current session
     let userName;
