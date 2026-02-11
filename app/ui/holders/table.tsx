@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { UpdateHolder, DeleteHolder } from '@/app/ui/holders/buttons';
-import { formatDateToLocal } from '@/app/lib/utils';
 import { fetchFilteredHolders } from '@/app/lib/data';
 
 export default async function HoldersTable({
