@@ -14,6 +14,7 @@ export default function Form({credentials}:{credentials:any}) {
 
   return (
      <form action={formAction}> 
+     <input type="hidden" name="credId" value='2324234'/>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         <Suspense fallback={<CredentialsTableSkeleton />}>
             <Table credentials={credentials}/>
@@ -23,6 +24,14 @@ export default function Form({credentials}:{credentials:any}) {
         </div>
         <DeliverySelection/>
         
+          <div id="vc" aria-live="polite" aria-atomic="true">
+            {state.vc &&
+                <p className="mt-2 text-sm text-red-500">
+                  {JSON.stringify(state.vc,null,2)}
+                </p>
+              }
+          </div>
+
           <div id="general-error" aria-live="polite" aria-atomic="true">
             {state.errors &&
                 <p className="mt-2 text-sm text-red-500">
@@ -30,6 +39,7 @@ export default function Form({credentials}:{credentials:any}) {
                 </p>
               }
           </div>
+
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Button type="submit">Get Credential</Button>
@@ -54,7 +64,7 @@ function EmailSelection () {
               <div className="flex items-center">
                 <input
                   id="pending"
-                  name="status"
+                  name="shouldIncludeEmail"
                   type="radio"
                   value="pending"
                   className="text-white-600 h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 focus:ring-2"
@@ -69,7 +79,7 @@ function EmailSelection () {
               <div className="flex items-center">
                 <input
                   id="paid"
-                  name="status"
+                  name="shouldIncludeEmail"
                   type="radio"
                   value="paid"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
@@ -98,7 +108,7 @@ function DeliverySelection () {
               <div className="flex items-center">
                 <input
                   id="pending"
-                  name="status"
+                  name="deliveryFormat"
                   type="radio"
                   value="pending"
                   className="text-white-600 h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 focus:ring-2"
@@ -113,7 +123,7 @@ function DeliverySelection () {
               <div className="flex items-center">
                 <input
                   id="paid"
-                  name="status"
+                  name="deliveryFormat"
                   type="radio"
                   value="paid"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
@@ -129,7 +139,7 @@ function DeliverySelection () {
                <div className="flex items-center">
                 <input
                   id="paid"
-                  name="status"
+                  name="deliveryFormat"
                   type="radio"
                   value="paid"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
@@ -145,7 +155,7 @@ function DeliverySelection () {
 <div className="flex items-center">
                 <input
                   id="paid"
-                  name="status"
+                  name="deliveryFormat"
                   type="radio"
                   value="paid"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
@@ -161,7 +171,7 @@ function DeliverySelection () {
 <div className="flex items-center">
                 <input
                   id="paid"
-                  name="status"
+                  name="deliveryFormat"
                   type="radio"
                   value="paid"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
@@ -177,7 +187,7 @@ function DeliverySelection () {
 <div className="flex items-center">
                 <input
                   id="paid"
-                  name="status"
+                  name="deliveryFormat"
                   type="radio"
                   value="paid"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
