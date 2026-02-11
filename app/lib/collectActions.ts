@@ -1,14 +1,10 @@
 'use server';
  
 import { auth } from '@/auth';
-
-import { callStore } from './store';
-
 import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { sign } from './sign';
 
-/* INcoming data:
+/* Incoming data:
 
 - holderId, credId, shouldIncludeEmail, deliveryFormat(plainVC,deepLinkLCW, ?)
 
@@ -80,46 +76,5 @@ export async function createCredential(prevState: State, formData: FormData) {
  
  // revalidatePath('/collect');
  // redirect('/collect');
-}
-
-
-export async function updateCredential(
-  id: string,
-  prevState: State,
-  formData: FormData,
-) {
-  const validatedFields = UpdateCredential.safeParse({
-    credTypeId: formData.get('credTypeId'),
-    credName: formData.get('credName'),
-    holder: formData.get('holder'),
-    email: formData.get('email'),
-  });
- 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Update Credential.',
-    };
-  }
- 
-  const { credTypeId, email, credName, holder } = validatedFields.data;
- 
-  try {
-     const result = await callStore(`credential/${id}`, 'PUT', {holder_email: email, holder_name: holder, cred_name: credName})
-  } catch (error) {
-    return { message: 'Database Error: Failed to pdate credential.' };
-  }
- 
-  revalidatePath('/dashboard/credentials');
-  redirect('/dashboard/credentials');
-}
-
-
-
-export async function deleteCredential(id: string) {
-    // TODO: not sure if we even want to allow deletions
-     throw new Error('Deletion not allowed');
-
- // revalidatePath('/dashboard/credentials');
 }
 
