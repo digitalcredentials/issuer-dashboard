@@ -1,3 +1,5 @@
+"use server";
+
 import { callStore } from './store';
 
 export async function fetchReportData() {
@@ -91,13 +93,11 @@ export async function fetchHolderById(id: string) {
 }
 
 export async function fetchHolderCredsById(
-  id: string,
-  queryTerm: string,
-  currentPage: number
+  id: string
 ) {
   try {
-    const response = await callStore(`holder/credentials/${id}`,'POST', {queryTerm, currentPage});
-    return response.credentials;
+    const response = await callStore(`holder/credentials/${id}`,'GET');
+    return response;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch holder credentials.');
