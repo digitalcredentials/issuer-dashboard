@@ -18,7 +18,7 @@ export default function Page() {
            <p
       className={`${lusitana.className} text-xl text-gray-800 md:text-3xl md:leading-normal`}
     >
-            <strong>Welcome to the Issuer Dashboard.</strong> Brought to you by the {' '}
+            <strong>Welcome to your Issuer Dashboard.</strong> Brought to you by the {' '}
             <a href="https://dcconsortium.org" className="text-blue-500">
               Digital Credentials Consortium
             </a>
@@ -33,7 +33,7 @@ export default function Page() {
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           <Image
-        src="/hero-desktop.png"
+        src="/landing-page-desktop.png"
         width={1000}
         height={760}
         className="hidden md:block"
