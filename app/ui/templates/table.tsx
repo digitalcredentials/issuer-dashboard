@@ -101,13 +101,13 @@ export default async function TemplatesTable({
                         {template.email}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {"to fix"}
+                        {"wip"}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {"to fix"}
+                        {"wip"}
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                        {"to fix"}
+                        {"wip"}
                       </td>
                     </tr>
                   ))}
