@@ -10,14 +10,32 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createCredential, State } from '@/app/lib/actions';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
+import { createPortal } from 'react-dom';
+import ClientPortal from '../utils/clientPortal';
+import HolderLookupModal from '../holders/HolderLookupModal';
 
 export default function Form({ templates }: { templates: TemplateField[] }) {
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(createCredential, initialState);
-
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [holder, setHolder] = useState(null)
+  const findHolder = () => {
+    console.log("in the find holder")
+    setIsModalOpen(true);
+  }
   return (
      <form action={formAction}> 
+      {isModalOpen && (
+        <ClientPortal>
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <HolderLookupModal/>
+              <button onClick={() => setIsModalOpen(false)}>Close Modal</button>
+            </div>
+          </div>
+        </ClientPortal>
+      )}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Credential Type */}
         <div className="mb-4">
@@ -85,15 +103,17 @@ export default function Form({ templates }: { templates: TemplateField[] }) {
         {/* Holder Name */}
         <div className="mb-4">
           <label htmlFor="holder" className="mb-2 block text-sm font-medium">
-            Specify the holder
+            Choose a holder
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
+                readOnly
                 id="holder"
                 name="holder"
                 type="string"
-                placeholder="Enter a name for the credential holder"
+                placeholder="Click to find a holder"
+                onClick={findHolder}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="holder-error"
               />
