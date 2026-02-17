@@ -55,7 +55,7 @@ export default function HolderLookupModal({onClose, selectHolder}: {onClose:Func
       <StatePagination totalPages={totalPages} currentPage={page} setCurrentPage={setPage}/>
       </div>
         {/* Optional close button */}
-        <button onClick={()=>{onClose}} className="mt-4 p-2 bg-blue-500 text-white rounded">
+        <button onClick={()=>{onClose()}} className="mt-4 p-2 bg-blue-500 text-white rounded">
           Close
         </button>
       </div>
