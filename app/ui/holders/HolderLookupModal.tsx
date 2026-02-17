@@ -3,7 +3,7 @@ import StateSearch from '@/app/ui/utils/stateSearch';
 import HoldersTable from '@/app/ui/holders/modalTable';
 
 import { lusitana } from '@/app/ui/fonts';
-import { HoldersTableSkeleton } from '@/app/ui/skeletons';
+import { HoldersLookupTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense, useState, useEffect } from 'react';
 import { fetchHoldersPages, fetchFilteredHolders } from '@/app/lib/data';
 
@@ -48,7 +48,7 @@ export default function HolderLookupModal({onClose, selectHolder}: {onClose:Func
            />
         
       </div>
-      <Suspense fallback={<HoldersTableSkeleton />}>
+      <Suspense fallback={<HoldersLookupTableSkeleton />}>
         <HoldersTable holders={holders} selectHolder={selectHolder}/>
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
