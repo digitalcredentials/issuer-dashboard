@@ -18,8 +18,7 @@ const FormSchema = z.object({
     invalid_type_error: 'Please select a status.',
   }),
   credName: z.string(),
-  holder: z.string(),
-  email: z.string(),
+  holderId: z.string()
 });
 
 const CreateCredential = FormSchema.omit({ id: true, status: true });
@@ -28,9 +27,8 @@ const UpdateCredential = FormSchema.omit({ id: true, status: true });
 export type State = {
   errors?: {
     credTypeId?: string[];
-    holder?: string[];
+    holderId?: string[];
     credName?: string[];
-    email?: string[];
   };
   message?: string | null;
 };
@@ -48,8 +46,7 @@ export async function createCredential(prevState: State, formData: FormData) {
   const validatedFields = CreateCredential.safeParse({
     credTypeId: formData.get('credTypeId'),
     credName: formData.get('credName'),
-    holder: formData.get('holder'),
-    email: formData.get('email'),
+    holderId: formData.get('holderId'),
   });
 
   // If form validation fails, return errors early. Otherwise, continue.
@@ -61,11 +58,11 @@ export async function createCredential(prevState: State, formData: FormData) {
   }
 
   // Prepare data for insertion into the database
-  const { credTypeId, email, credName, holder } = validatedFields.data;
+  const { credTypeId, credName, holderId } = validatedFields.data;
   // TODO: want to directly deal with 404's using notFound()
   try {
     // TODO the credType will be used to pick a vc template, populate it, and that populated template will be saved here to the store.
-    const result = await callStore('credential', 'POST', { holder_email: email, holder_name: holder, cred_name: credName, added_by: userName })
+    const result = await callStore('credential', 'POST', { holder_id: holderId, cred_name: credName, added_by: userName })
 
   } catch (error) {
     // We'll also log the error to the console for now
@@ -99,10 +96,10 @@ export async function updateCredential(
     };
   }
 
-  const { credTypeId, email, credName, holder } = validatedFields.data;
+  const { credTypeId, credName, holderId } = validatedFields.data;
 
   try {
-    const result = await callStore(`credential/${id}`, 'PUT', { holder_email: email, holder_name: holder, cred_name: credName })
+    const result = await callStore(`credential/${id}`, 'PUT', { holder_id: holderId, cred_name: credName })
   } catch (error) {
     return { message: 'Database Error: Failed to pdate credential.' };
   }
