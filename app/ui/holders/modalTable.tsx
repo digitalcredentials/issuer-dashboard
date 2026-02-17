@@ -3,10 +3,10 @@ import { UpdateHolder, DeleteHolder } from '@/app/ui/holders/buttons';
 
 export default async function HoldersTable({
   holders,
-  setHolder
+  selectHolder
 }: {
   holders: any;
-  setHolder: Function
+  selectHolder: Function
 }) {
   
   return (
@@ -16,6 +16,7 @@ export default async function HoldersTable({
           <div className="md:hidden">
             {holders?.map((holder:any) => (
               <div
+              onClick={()=>{selectHolder(holder)}}
                 key={holder.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
@@ -32,7 +33,7 @@ export default async function HoldersTable({
                     </p>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <div onClick={()=>{/*TODO: call setHolder and close modal*/ }}/>
+                    <div onClick={()=>{selectHolder(holder)}}/>
                   </div>
                 </div>
               </div>
@@ -59,7 +60,7 @@ export default async function HoldersTable({
             </thead>
             <tbody className="bg-white">
               {holders?.map((holder:any) => (
-                <tr
+                <tr onClick={()=>{selectHolder(holder)}}
                   key={holder.id}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
@@ -76,7 +77,7 @@ export default async function HoldersTable({
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <div  onClick={()=>{/*TODO: call setHolder and close modal*/ }}/>
+                      <div onClick={()=>{selectHolder(holder)}}/>
                     </div>
                   </td>
                 </tr>
