@@ -7,11 +7,7 @@ import { HoldersTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense, useState, useEffect } from 'react';
 import { fetchHoldersPages, fetchFilteredHolders } from '@/app/lib/data';
 
-export default function HolderLookupModal({onClose}: {onClose:Function}) {
- // const searchParams = await props.searchParams;
- // const query = searchParams?.query || '';
- // const currentPage = Number(searchParams?.page) || 1;
- // const totalPages = await fetchHoldersPages(query);
+export default function HolderLookupModal({onClose, selectHolder}: {onClose:Function, selectHolder:Function}) {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -41,7 +37,7 @@ export default function HolderLookupModal({onClose}: {onClose:Function}) {
       <div className="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full m-4">
         {/* Modal content (e.g., header, body, footer) */}
        <div className="flex w-full items-center justify-between">
-        <h1 className={`${lusitana.className} text-2xl`}>Holders (Recipients)</h1>
+        <h1 className={`${lusitana.className} text-2xl`}>Find the Holder (Recipient)</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <StateSearch 
@@ -53,10 +49,10 @@ export default function HolderLookupModal({onClose}: {onClose:Function}) {
         
       </div>
       <Suspense fallback={<HoldersTableSkeleton />}>
-        <HoldersTable holders={holders}/>
+        <HoldersTable holders={holders} selectHolder={selectHolder}/>
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
-      <StatePagination totalPages={3} currentPage={page} setCurrentPage={setPage}/>
+      <StatePagination totalPages={totalPages} currentPage={page} setCurrentPage={setPage}/>
       </div>
         {/* Optional close button */}
         <button onClick={()=>{onClose}} className="mt-4 p-2 bg-blue-500 text-white rounded">
