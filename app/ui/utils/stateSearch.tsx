@@ -10,7 +10,7 @@ export default function StateSearch({ placeholder, query, setQuery, setPage }: {
     if (term) {
       setQuery(term);
     } else {
-      setQuery(null);
+      setQuery('');
     }
 }, 300);
 
