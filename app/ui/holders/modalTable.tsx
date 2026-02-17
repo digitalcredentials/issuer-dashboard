@@ -2,9 +2,11 @@ import Image from 'next/image';
 import { UpdateHolder, DeleteHolder } from '@/app/ui/holders/buttons';
 
 export default async function HoldersTable({
-  holders
+  holders,
+  setHolder
 }: {
   holders: any;
+  setHolder: Function
 }) {
   
   return (
@@ -19,16 +21,6 @@ export default async function HoldersTable({
               >
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
-                    <div className="mb-2 flex items-center">
-                      <Image
-                        src={'/placeholder-images/evil-rabbit.png'}
-                        className="mr-2 rounded-full"
-                        width={28}
-                        height={28}
-                        alt={`${holder.name} image`}
-                      />
-                      <p>{holder.name}</p>
-                    </div>
                     <p className="text-sm text-gray-500">{holder.email}</p>
                   </div>
             
@@ -38,11 +30,9 @@ export default async function HoldersTable({
                     <p className="text-xl font-medium">
                       {holder.orgId}
                     </p>
-                    <p>holder.did</p>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <UpdateHolder id={holder.id} />
-                    <DeleteHolder id={holder.id} />
+                    <div onClick={()=>{/*TODO: call setHolder and close modal*/ }}/>
                   </div>
                 </div>
               </div>
@@ -60,13 +50,10 @@ export default async function HoldersTable({
                   Email
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Organizational Id
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Decentralized Identifier (DID)
+                  Org Id
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
-                  <span className="sr-only">Edit</span>
+                  <span className="sr-only">Select</span>
                 </th>
               </tr>
             </thead>
@@ -78,30 +65,18 @@ export default async function HoldersTable({
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
-                      <Image
-                        src={'/placeholder-images/evil-rabbit.png'}
-                        className="rounded-full"  
-                        width={28}
-                        height={28}
-                        alt={`${holder.name}'s profile picture`}
-                      />
                       <p>{holder.name}</p>
                     </div>
                   </td>
-
                   <td className="whitespace-nowrap px-3 py-3">
                     {holder.email}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {holder.orgId}
                   </td>
-                 <td className="whitespace-nowrap px-3 py-3">
-                    {holder.did}
-                  </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateHolder id={holder.id} />
-                      <DeleteHolder id={holder.id} />
+                      <div  onClick={()=>{/*TODO: call setHolder and close modal*/ }}/>
                     </div>
                   </td>
                 </tr>
