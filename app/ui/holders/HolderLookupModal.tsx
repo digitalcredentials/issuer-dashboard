@@ -1,11 +1,11 @@
-import Pagination from '@/app/ui/pagination';
+import StatePagination from '@/app/ui/utils/statePagination';
 import StateSearch from '@/app/ui/utils/stateSearch';
-import Table from '@/app/ui/holders/table';
+import HoldersTable from '@/app/ui/holders/modalTable';
 
 import { lusitana } from '@/app/ui/fonts';
 import { HoldersTableSkeleton } from '@/app/ui/skeletons';
-import { Suspense, useState } from 'react';
-//import { fetchHoldersPages } from '@/app/lib/data';
+import { Suspense, useState, useEffect } from 'react';
+import { fetchHoldersPages, fetchFilteredHolders } from '@/app/lib/data';
 
 export default function HolderLookupModal({onClose}: {onClose:Function}) {
  // const searchParams = await props.searchParams;
@@ -14,6 +14,24 @@ export default function HolderLookupModal({onClose}: {onClose:Function}) {
  // const totalPages = await fetchHoldersPages(query);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [holders, setHolders] = useState(null);
+  
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [pageResult, holderResult] = await Promise.all([
+          fetchHoldersPages(query),
+          fetchFilteredHolders(query, page)
+        ]);
+        setTotalPages(pageResult);
+        setHolders(holderResult)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData();
+  }, [query, page])
 
   return (
 
@@ -35,10 +53,10 @@ export default function HolderLookupModal({onClose}: {onClose:Function}) {
         
       </div>
       <Suspense fallback={<HoldersTableSkeleton />}>
-        { /* <Table  /> */}
+        <HoldersTable holders={holders}/>
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
-       { /* <Pagination totalPages={3} /> */}
+      <StatePagination totalPages={3} currentPage={page} setCurrentPage={setPage}/>
       </div>
         {/* Optional close button */}
         <button onClick={()=>{onClose}} className="mt-4 p-2 bg-blue-500 text-white rounded">
