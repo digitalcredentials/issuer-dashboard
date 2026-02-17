@@ -18,7 +18,7 @@ export default function Form({ templates }: { templates: TemplateField[] }) {
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(createCredential, initialState);
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [holder, setHolder] = useState(null)
+  const [holder, setHolder] = useState({name:'', did: '', org_id: '', email: ''})
   const findHolder = () => {
     setIsModalOpen(true);
   }
@@ -116,6 +116,7 @@ export default function Form({ templates }: { templates: TemplateField[] }) {
                 name="holder"
                 type="string"
                 placeholder="Click to find a holder"
+                defaultValue={holder.name}
                 onClick={findHolder}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="holder-error"
@@ -136,15 +137,17 @@ export default function Form({ templates }: { templates: TemplateField[] }) {
         {/* Holder email address */}
         <div className="mb-4">
           <label htmlFor="email" className="mb-2 block text-sm font-medium">
-            Specify the email for the holder
+            Holder&apos;s email address
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
+                readOnly
                 id="email"
                 name="email"
                 type="email"
-                placeholder="Enter an email address"
+                defaultValue={holder.email}
+                placeholder="Automatically set from holder search"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="email-error"
               />
