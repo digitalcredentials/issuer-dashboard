@@ -8,13 +8,13 @@ export default async function HoldersTable({
   holders: any;
   selectHolder: Function
 }) {
-  
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
             {holders?.map((holder:any) => (
+              
               <div
               onClick={()=>{selectHolder(holder)}}
                 key={holder.id}
@@ -29,7 +29,7 @@ export default async function HoldersTable({
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <p className="text-xl font-medium">
-                      {holder.orgId}
+                      {holder.org_id}
                     </p>
                   </div>
                   <div className="flex justify-end gap-2">
@@ -73,7 +73,7 @@ export default async function HoldersTable({
                     {holder.email}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {holder.orgId}
+                    {holder.org_id}
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
