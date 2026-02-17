@@ -11,7 +11,6 @@ import {
 import { Button } from '@/app/ui/button';
 import { createCredential, State } from '@/app/lib/actions';
 import { useActionState, useState } from 'react';
-import { createPortal } from 'react-dom';
 import ClientPortal from '../utils/clientPortal';
 import HolderLookupModal from '../holders/HolderLookupModal';
 
@@ -21,16 +20,20 @@ export default function Form({ templates }: { templates: TemplateField[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [holder, setHolder] = useState(null)
   const findHolder = () => {
-    console.log("in the find holder")
     setIsModalOpen(true);
   }
+  const selectHolder = (holder:any) => {
+    setHolder(holder);
+    setIsModalOpen(false);
+  }
+
   return (
      <form action={formAction}> 
       {isModalOpen && (
         <ClientPortal>
           <div className="modal-overlay">
             <div className="modal-content">
-              <HolderLookupModal/>
+              <HolderLookupModal selectHolder={selectHolder} onClose={()=>{setIsModalOpen(false)}} />
               <button onClick={() => setIsModalOpen(false)}>Close Modal</button>
             </div>
           </div>
