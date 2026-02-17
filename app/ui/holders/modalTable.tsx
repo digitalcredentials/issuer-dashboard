@@ -1,7 +1,6 @@
-import Image from 'next/image';
 import { UpdateHolder, DeleteHolder } from '@/app/ui/holders/buttons';
 
-export default async function HoldersTable({
+export default function HoldersTable({
   holders,
   selectHolder
 }: {
