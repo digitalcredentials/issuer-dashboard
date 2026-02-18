@@ -1,29 +1,58 @@
 'use client';
 
-import { TemplateField, CredentialForm } from '@/app/lib/definitions';
+import { TemplateField, CredentialForm, HolderForm } from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
   MagnifyingGlassCircleIcon,
   TagIcon,
+  UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updateCredential, State } from '@/app/lib/actions';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
+import ClientPortal from '../utils/clientPortal';
+import HolderLookupModal from '../holders/HolderLookupModal';
 
 export default function EditCredentialForm({
-  credential,
+  credentialResult,
   templates,
 }: {
-  credential: CredentialForm;
+  credentialResult: any;
   templates: TemplateField[];
 }) {
+  const credential = credentialResult.credential
   const initialState: State = { message: null, errors: {} };
   const updateCredentialWithId = updateCredential.bind(null, credential.id);
   const [state, formAction] = useActionState(updateCredentialWithId, initialState);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [holder, setHolder] = useState(credentialResult.holder)
+  const findHolder = () => {
+    setIsModalOpen(true);
+  }
+  const selectHolder = (holder:any) => {
+    setHolder(holder);
+    setIsModalOpen(false);
+  }
 
   return (
-    <form action={formAction}>
+     <form action={formAction}> 
+      {isModalOpen && (
+        <ClientPortal>
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <HolderLookupModal selectHolder={selectHolder} onClose={()=>{setIsModalOpen(false)}} />
+              <button onClick={() => setIsModalOpen(false)}>Close Modal</button>
+            </div>
+          </div>
+        </ClientPortal>
+      )}
+              <input
+                id="holderId"
+                name="holderId"
+                type="hidden"
+                defaultValue={holder.id}
+              />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Credential Type */}
         <div className="mb-4">
@@ -70,45 +99,82 @@ export default function EditCredentialForm({
           </div>
         </div>
 
-{/* Holder Name */}
+ {/* Holder Name */}
         <div className="mb-4">
           <label htmlFor="holder" className="mb-2 block text-sm font-medium">
-            Specify a name for the credential holder
+            Choose a holder (click to search)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
+                readOnly
                 id="holder"
                 name="holder"
                 type="string"
-                defaultValue={credential.holder_name}
-                placeholder="Enter a name for the credential"
+                placeholder="Click to find a holder"
+                defaultValue={holder.name}
+                onClick={findHolder}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="holder-error"
               />
-              <MagnifyingGlassCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+               <div id="holder-error" aria-live="polite" aria-atomic="true">
+                {state.errors?.holderId &&
+                  state.errors.holderId.map((error: string) => (
+                    <p className="mt-2 text-sm text-red-500" key={error}>
+                      {error}
+                    </p>
+                  ))}
+                </div>
           </div>
         </div>
 
-        {/* Holder Email  */}
+        {/* Holder email address */}
         <div className="mb-4">
           <label htmlFor="email" className="mb-2 block text-sm font-medium">
-            Specify an email address for the credential holder
+            Holder&apos;s email address
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
+                readOnly
                 id="email"
                 name="email"
-                type="string"
-                defaultValue={credential.holder_email}
-                placeholder="Enter an email address for the credential holder"
+                type="email"
+                defaultValue={holder.email}
+                placeholder="Automatically set from holder search"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="email-error"
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
         </div>
+        
+
+                {/* Holder org id */}
+        <div className="mb-4">
+          <label htmlFor="org_id" className="mb-2 block text-sm font-medium">
+            Holder&apos;s internal organizational id
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                readOnly
+                id="org_id"
+                name="org_id"
+                type="org_id"
+                defaultValue={holder.org_id}
+                placeholder="Automatically set from holder search"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="email-error"
+              />
+              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+          </div>
+        </div>
+
 
       </div>
       <div className="mt-6 flex justify-end gap-4">
