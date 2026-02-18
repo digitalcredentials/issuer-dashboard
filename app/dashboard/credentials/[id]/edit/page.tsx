@@ -6,12 +6,12 @@ import { fetchCredentialById, fetchAllTemplates } from '@/app/lib/data';
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
-  const [credential, templates] = await Promise.all([
+  const [credentialResult, templates] = await Promise.all([
     fetchCredentialById(id),
     fetchAllTemplates(),
   ]);
 
-    if (!credential) {
+    if (!credentialResult) {
     notFound();
   }
 
@@ -27,7 +27,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           },
         ]}
       />
-      <Form credential={credential} templates={templates} />
+      <Form credentialResult={credentialResult} templates={templates} />
     </main>
   );
 }
