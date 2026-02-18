@@ -74,8 +74,8 @@ export async function fetchHoldersPages(queryTerm: string) {
 
 export async function fetchCredentialById(id: string) {
   try {
-    const credential = await callStore(`credential/${id}`, 'GET');
-    return credential;
+    const result = await callStore(`credential/${id}`, 'GET');
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch credential.');
