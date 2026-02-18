@@ -85,8 +85,7 @@ export async function updateCredential(
   const validatedFields = UpdateCredential.safeParse({
     credTypeId: formData.get('credTypeId'),
     credName: formData.get('credName'),
-    holder: formData.get('holder'),
-    email: formData.get('email'),
+    holderId: formData.get('holderId'),
   });
 
   if (!validatedFields.success) {
