@@ -102,7 +102,7 @@ export default function EditCredentialForm({
  {/* Holder Name */}
         <div className="mb-4">
           <label htmlFor="holder" className="mb-2 block text-sm font-medium">
-            Choose a holder (click to search)
+            Choose a holder (click field to search)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -133,7 +133,7 @@ export default function EditCredentialForm({
         {/* Holder email address */}
         <div className="mb-4">
           <label htmlFor="email" className="mb-2 block text-sm font-medium">
-            Holder&apos;s email address
+            Holder&apos;s email address (read-only)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -156,7 +156,7 @@ export default function EditCredentialForm({
                 {/* Holder org id */}
         <div className="mb-4">
           <label htmlFor="org_id" className="mb-2 block text-sm font-medium">
-            Holder&apos;s internal organizational id
+            Holder&apos;s internal organizational id (read-only)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
