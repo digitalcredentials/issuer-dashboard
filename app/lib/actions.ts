@@ -109,12 +109,22 @@ export async function updateCredential(
 
 
 
+
+
 export async function deleteCredential(id: string) {
   // TODO: not sure if we even want to allow deletions
   throw new Error('Deletion not allowed');
 
   // revalidatePath('/dashboard/credentials');
 }
+
+export async function notifyHolder(id: string) {
+  // TODO: create and send the email
+  // AND: update the status to say notified.
+  // AND: update the new 'NOTIFICATIONS' table with credId, date email sent, and email to which sent.
+  revalidatePath('/dashboard/credentials');
+}
+
 
 export async function authenticate(
   prevState: string | undefined,
