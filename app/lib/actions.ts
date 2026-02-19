@@ -8,6 +8,7 @@ import { callStore } from './store';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { notify } from './email/notify';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -62,6 +63,7 @@ export async function createCredential(prevState: State, formData: FormData) {
   // TODO: want to directly deal with 404's using notFound()
   try {
     // TODO the credType will be used to pick a vc template, populate it, and that populated template will be saved here to the store.
+    // TODO move this into the data file
     const result = await callStore('credential', 'POST', { holder_id: holderId, cred_name: credName, added_by: userName })
 
   } catch (error) {
@@ -118,11 +120,8 @@ export async function deleteCredential(id: string) {
   // revalidatePath('/dashboard/credentials');
 }
 
-export async function notifyHolder(id: string) {
-  // TODO: create and send the email
-  // AND: update the status to say notified.
-  // AND: update the new 'NOTIFICATIONS' table with credId, date email sent, and email to which sent.
-  revalidatePath('/dashboard/credentials');
+export async function notifyHolder(credentialId: string) {
+  notify(credentialId);
 }
 
 
