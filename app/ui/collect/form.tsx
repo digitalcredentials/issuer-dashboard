@@ -6,8 +6,9 @@ import { useActionState } from 'react';
 import Table from '@/app/ui/collect/table';
 import { Suspense} from 'react';
 import { CredentialsTableSkeleton } from '@/app/ui/skeletons';
+import { Credential } from '@/app/lib/definitions';
 
-export default function Form({credentials}:{credentials:any}) {
+export default function Form({credentials}:{credentials:Credential[]}) {
   
   const initialState: State = { message: null, errors: {} };
   const [state, formAction] = useActionState(collectCredential, initialState);
