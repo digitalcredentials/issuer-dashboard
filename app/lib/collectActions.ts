@@ -44,8 +44,7 @@ export type State = {
 };
 
 export async function collectCredential(prevState: State, formData: FormData) {
-  console.log("in the collect credential")
-  console.log("formData", formData)
+
     const session = await auth(); // Get the current session
     let userName;
     if (!session?.user) {
