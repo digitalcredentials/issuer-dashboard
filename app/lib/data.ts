@@ -135,4 +135,12 @@ export async function fetchFilteredTemplates(queryTerm: string) {
   }
 }
 
-
+export async function addNotification(credential_id: string, email:string) {
+  try {
+    const response = await callStore('notification','POST', {credential_id, email});
+    return response.pickup_token;  // response is: { pickup_token: '9857c3d7-0dca-11f1-be3b-6a08aca4e7b8' }
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to add the notification.');
+  }
+}
