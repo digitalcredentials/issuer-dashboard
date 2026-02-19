@@ -1,6 +1,6 @@
-import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { InboxIcon, PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteCredential } from '@/app/lib/actions';
+import { deleteCredential, notifyHolder } from '@/app/lib/actions';
 
 export function CreateCredential() {
   return (
@@ -35,6 +35,19 @@ export function DeleteCredential({ id }: { id: string }) {
       <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-4" />
+      </button>
+    </form>
+  );
+}
+
+export function Notify({ id }: { id: string }) {
+  const notifyHolderForCredId = notifyHolder.bind(null, id);
+ 
+  return (
+    <form action={notifyHolderForCredId}>
+      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+        <span className="sr-only">Notify</span>
+        <InboxIcon className="w-4" />
       </button>
     </form>
   );
