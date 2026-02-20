@@ -10,7 +10,7 @@ export async function notify(credentialId:string) {
      // 1. get the credential details from db.
   const {credential, holder} = await fetchCredentialById(credentialId);
   // 2. call the 'NOTIFICATIONS' endpoint with credId, date email sent, and email to which sent.
-  const pickupToken = await addNotification(credential.id,holder.email)
+  const pickupToken = await addNotification(credential.id,holder)
   // 3. send the email
     const collectionPageURL = `${appHost}/collect?pickup_token=${pickupToken}`
     const html = getPopulatedEmail(collectionPageURL, holder.name)
