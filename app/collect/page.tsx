@@ -1,11 +1,23 @@
 'use server';
 import Form from '@/app/ui/collect/form';
 import { lusitana } from '@/app/ui/fonts';
-import { fetchHolderCredsById } from "@/app/lib/data";
+import { fetchHolderCredsByPickupToken, fetchHolderCredsById } from "@/app/lib/data";
 
-export default async function Page() {
+export default async function Page(props: {
+  searchParams?: Promise<{
+    pickup_token?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const pickupToken = searchParams?.pickup_token || null;
   const holderId = "4";
-  const credentials = await fetchHolderCredsById(holderId)
+  let credentials;
+  if (pickupToken) {
+    credentials = await fetchHolderCredsByPickupToken(pickupToken)
+    console.log("the test result", credentials)
+  } 
+   // const credentials = await fetchHolderCredsById(holderId)
+  
 
   return (
     <main className ="p-4">
