@@ -6,7 +6,7 @@ import {
 
 import Image from "next/image";
 import { formatDateToLocal } from "@/app/lib/utils";
-export default function Table({credentials}:{credentials:any}) {
+export default function Table({credentials, setSelectedCredential}:{credentials:any, setSelectedCredential:Function}) {
   return (
     <>
       <div className="flow-root">
@@ -43,7 +43,10 @@ export default function Table({credentials}:{credentials:any}) {
                       <p>{formatDateToLocal(credential.date_added)}</p>
                     </div>
                     <div className="flex justify-end gap-2">
-                      <SelectCredential id={credential.id} />
+                       <div onClick={()=>{setSelectedCredential(credential)}} className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                          <span className="hidden md:block">Select</span>{" "}
+                          <PlusIcon className="h-5 md:ml-4" />
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -99,7 +102,10 @@ export default function Table({credentials}:{credentials:any}) {
 
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
-                        <SelectCredential id={credential.id} />
+                        <div onClick={()=>{setSelectedCredential(credential)}} className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                          <span className="hidden md:block">Select</span>{" "}
+                          <PlusIcon className="h-5 md:ml-4" />
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -113,12 +119,4 @@ export default function Table({credentials}:{credentials:any}) {
   );
 }
 
-function SelectCredential({ id }: { id: string }) {
-  return (
-    <div className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-      
-      <span className="hidden md:block">Select</span>{" "}
-      <PlusIcon className="h-5 md:ml-4" />
-    </div>
-  );
-}
+
