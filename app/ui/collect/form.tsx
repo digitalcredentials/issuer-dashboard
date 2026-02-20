@@ -2,50 +2,74 @@
 
 import { Button } from '@/app/ui/button';
 import { collectCredential, State } from '@/app/lib/collectActions';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import Table from '@/app/ui/collect/table';
 import { Suspense} from 'react';
 import { CredentialsTableSkeleton } from '@/app/ui/skeletons';
-import { Credential } from '@/app/lib/definitions';
+import { Credential, CredentialForm } from '@/app/lib/definitions';
+import { lusitana } from '@/app/ui/fonts';
 
 export default function Form({credentials}:{credentials:Credential[]}) {
   
   const initialState: State = { message: null, errors: {} };
+  const [selectedCredential, setSelectedCredential] = useState<CredentialForm | undefined>(undefined); 
   const [state, formAction] = useActionState(collectCredential, initialState);
 
   return (
-     <form action={formAction}> 
-     <input type="hidden" name="credId" value='2324234'/>
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+    <>
+      {!selectedCredential &&
+      <>
+        <h1 className={`${lusitana.className} text-2xl p-4`}>You have the following credentials. Select one to collect.</h1>
         <Suspense fallback={<CredentialsTableSkeleton />}>
-            <Table credentials={credentials}/>
+            <Table credentials={credentials} setSelectedCredential={setSelectedCredential}/>
         </Suspense>
-        <div className="py-8">
-        <EmailSelection/>
-        </div>
-        <DeliverySelection/>
+      </>
+      }
+     <form action={formAction}> 
+     <input type="hidden" name="credId" defaultValue={selectedCredential?.id}/>
+      <div className="rounded-md bg-gray-50 p-4 md:p-6">
         
-          <div id="vc" aria-live="polite" aria-atomic="true">
-            {state.vc &&
-                <p className="mt-2 text-sm text-red-500">
-                  {JSON.stringify(state.vc,null,2)}
-                </p>
-              }
+        {selectedCredential && 
+          <>
+          <div className="w-screen flex flex-col justify-center items-center">
+            <h1 className={`${lusitana.className} text-center text-2xl p-4`}>You&apos;ve selected:</h1>
+           <div className="w-1/2 border rounded-lg border-black bg-white max-w-60 flex flex-col justify-center items-center">
+              
+              
+              <h2 className="text-center text-2xl p-4"> {selectedCredential.cred_name}</h2>
+              <div>issued to</div>
+              <h2 className="text-center text-2xl p-4"> {selectedCredential.holder_name}</h2>
+              
           </div>
-
-          <div id="general-error" aria-live="polite" aria-atomic="true">
-            {state.errors &&
-                <p className="mt-2 text-sm text-red-500">
-                  {state.message}
-                </p>
-              }
           </div>
+            <div className="py-8">
+            <EmailSelection/>
+            </div>
+            <DeliverySelection/>
+            <div id="vc" aria-live="polite" aria-atomic="true">
+              {state.vc &&
+                  <p className="mt-2 text-sm text-red-500">
+                    {JSON.stringify(state.vc,null,2)}
+                  </p>
+                }
+            </div>
 
-      </div>
-      <div className="mt-6 flex justify-end gap-4">
-        <Button type="submit">Get Credential</Button>
-      </div>
+            <div id="general-error" aria-live="polite" aria-atomic="true">
+              {state.errors &&
+                  <p className="mt-2 text-sm text-red-500">
+                    {state.message}
+                  </p>
+                }
+            </div>
+
+            <div className="mt-6 flex justify-end gap-4">
+              <Button type="submit">Get Credential</Button>
+            </div>
+          </>
+        }
+       </div>
     </form>
+    </>
   );
 }
 
