@@ -1,6 +1,6 @@
 'use client';
 
-import { TemplateField, CredentialForm, HolderForm } from '@/app/lib/definitions';
+import { TemplateField, CredentialForm, Holder } from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
   MagnifyingGlassCircleIcon,

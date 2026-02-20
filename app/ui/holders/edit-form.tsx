@@ -1,6 +1,6 @@
 'use client';
 
-import { HolderForm } from '@/app/lib/definitions';
+import { Holder } from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
   MagnifyingGlassCircleIcon,
@@ -14,7 +14,7 @@ import { useActionState } from 'react';
 export default function EditHolderForm({
   holder
 }: {
-  holder: HolderForm;
+  holder: Holder;
 }) {
   const initialState: State = { message: null, errors: {} };
   const updateCredentialWithId = updateHolder.bind(null, holder.id);
