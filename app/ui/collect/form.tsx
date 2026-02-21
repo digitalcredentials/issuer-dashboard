@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/app/ui/button';
-import { collectCredential, State } from '@/app/lib/collectActions';
+import { collectCredential, State } from '@/app/lib/collection/collectActions';
 import { useActionState, useState } from 'react';
 import Table from '@/app/ui/collect/table';
 import { Suspense} from 'react';
@@ -72,9 +72,6 @@ export default function Form({credentials}:{credentials:Credential[]}) {
     </>
   );
 }
-
-
-
 
 
 function EmailSelection ({emailAddress}:{emailAddress:string}) {

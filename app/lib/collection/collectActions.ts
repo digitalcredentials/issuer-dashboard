@@ -70,7 +70,10 @@ export async function collectCredential(prevState: State, formData: FormData) {
  // TODO: want to directly deal with 404's from the signing service using notFound()
   try {
     // TODO: replace username, which for now is the email address of whoever is logged in, with organizational id.
+    NEXT: HERE I WANT TO INVOKE THE WORKFLOW COORDINATOR IF THE DELIVERY FORMAT IS LCW AND THEN RETURN 
+    THE DEEPLINK
     const result = await sign({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
+    const deeplink = await getDeepLink({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
     return {vc: result}
   } catch (error) {
     // We'll also log the error to the console for now
