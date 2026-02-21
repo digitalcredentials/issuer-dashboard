@@ -43,7 +43,7 @@ export default function Form({credentials}:{credentials:Credential[]}) {
           </div>
           </div>
             <div className="py-8">
-            <EmailSelection/>
+            <EmailSelection emailAddress={selectedCredential.holder_email}/>
             </div>
             <DeliverySelection/>
             <div id="vc" aria-live="polite" aria-atomic="true">
@@ -77,12 +77,12 @@ export default function Form({credentials}:{credentials:Credential[]}) {
 
 
 
-function EmailSelection () {
+function EmailSelection ({emailAddress}:{emailAddress:string}) {
 
   return (
  <fieldset>
           <legend className="mb-2 block text-sm font-medium">
-            Would you like to include your email address in the credential?
+            Would you like to include your email address ({emailAddress}) in the credential?
           </legend>
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3 pl-6">
             <div className="flex gap-4">
