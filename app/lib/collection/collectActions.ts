@@ -71,11 +71,9 @@ export async function collectCredential(prevState: State, formData: FormData) {
  // TODO: want to directly deal with 404's from the signing service using notFound()
   try {
     // TODO: replace username, which for now is the email address of whoever is logged in, with organizational id.
-
-    const result = await sign({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
-    const deeplink = await getDeepLink({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
-    console.log("the deeplink: ", deeplink)
-    return {vc: result}
+   // const result = await sign({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
+    const deepLink = await getDeepLink({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
+    return {deepLink}
   } catch (error) {
     // We'll also log the error to the console for now
     console.error(error);
