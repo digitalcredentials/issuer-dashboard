@@ -54,20 +54,20 @@ export default function EditCredentialForm({
                 defaultValue={holder.id}
               />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Credential Type */}
+        {/* Credential Template ID */}
         <div className="mb-4">
-          <label htmlFor="credential-type" className="mb-2 block text-sm font-medium">
+          <label htmlFor="template-id" className="mb-2 block text-sm font-medium">
             Choose a template
           </label>
           <div className="relative">
             <select
-              id="credential-type"
-              name="credTypeId"
+              id="template-id"
+              name="templateId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue={credential.cred_template_id}
             >
               <option value="" disabled>
-                Select a credential type
+                Select a credential template
               </option>
               {templates.map((template) => (
                 <option key={template.id} value={template.id}>
