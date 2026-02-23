@@ -1,6 +1,5 @@
 'use server';
 import Form from '@/app/ui/collect/form';
-import { lusitana } from '@/app/ui/fonts';
 import { fetchHolderCredsByPickupToken } from "@/app/lib/data";
 import { notFound } from 'next/navigation';
 
