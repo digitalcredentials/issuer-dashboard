@@ -2,7 +2,7 @@
  
 import { auth } from '@/auth';
 import { z } from 'zod';
-import { sign } from './sign';
+//import { sign } from './sign';
 import { getDeepLink } from './getDeepLink';
 
 /* Incoming data:
@@ -49,7 +49,7 @@ export async function collectCredential(prevState: State, formData: FormData) {
     const session = await auth(); // Get the current session
     let userName;
     if (!session?.user) {
-        throw new Error('You must be signed in to perform this action');
+        throw new Error('You must sign in to do that.');
     } else {
         userName = session.user.email as string
     }
