@@ -9,6 +9,9 @@ import { CredentialsTableSkeleton } from '@/app/ui/skeletons';
 import { Credential, CredentialForm } from '@/app/lib/definitions';
 import { lusitana } from '@/app/ui/fonts';
 
+import QRCode from "react-qr-code";
+import Link from 'next/link';
+
 export default function Form({credentials}:{credentials:Credential[]}) {
   
   const initialState: State = { message: null, errors: {} };
@@ -29,7 +32,7 @@ export default function Form({credentials}:{credentials:Credential[]}) {
      <input type="hidden" name="credId" defaultValue={selectedCredential?.id}/>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         
-        {selectedCredential && 
+        {selectedCredential && !state.deepLink &&
           <>
           <div className="w-screen flex flex-col justify-center items-center">
             <h1 className={`${lusitana.className} text-center text-2xl p-4`}>You&apos;ve selected:</h1>
@@ -46,13 +49,6 @@ export default function Form({credentials}:{credentials:Credential[]}) {
             <EmailSelection emailAddress={selectedCredential.holder_email}/>
             </div>
             <DeliverySelection/>
-            <div id="vc" aria-live="polite" aria-atomic="true">
-              {state.vc &&
-                  <p className="mt-2 text-sm text-red-500">
-                    {JSON.stringify(state.vc,null,2)}
-                  </p>
-                }
-            </div>
 
             <div id="general-error" aria-live="polite" aria-atomic="true">
               {state.errors &&
@@ -69,13 +65,13 @@ export default function Form({credentials}:{credentials:Credential[]}) {
         }
        </div>
     </form>
+   { state.deepLink && <LCWCollection deepLink={state.deepLink} /> }
     </>
   );
 }
 
 
 function EmailSelection ({emailAddress}:{emailAddress:string}) {
-
   return (
  <fieldset>
           <legend className="mb-2 block text-sm font-medium">
@@ -115,7 +111,6 @@ function EmailSelection ({emailAddress}:{emailAddress:string}) {
               </div>
             </div>
           </div>
-          
         </fieldset>
 )}
 
@@ -229,3 +224,33 @@ function DeliverySelection () {
         </fieldset>
   
 )}
+
+function LCWCollection({deepLink}:any) {
+  if (deepLink ) {
+    return (
+    <div className="m-5 flex  justify-center items-center flex-col gap-4">
+       <h1 className={`${lusitana.className} text-2xl p-4`}>Your credential has been prepared and is ready to be added to your Learner Credential Wallet.</h1>
+    
+      <div className="max-w-[900px] text-lg md:text-base font-medium">
+        If you are viewing this page on your phone then click here to add your credential to the Learner Credential Wallet:<br />
+      </div>
+      <div className="m-5 flex justify-center gap-4">
+        <a href={`${deepLink}`} className="flex h-10 items-center rounded-lg bg-gray-200 px-4 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-800">Add to LCW</a>
+      </div>
+      <div className="max-w-[900px] text-left text-sm md:text-base font-medium">
+      If you are viewing this page on a computer screen, scan this QR from your phone camera:
+
+      </div>
+      <div className="mt-6 mb-5 flex justify-center align-middle">
+        <div style={{ height: "auto", margin: "0 auto", maxWidth: 128, width: "100%" }}>
+          <QRCode
+            size={256}
+            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+            value={deepLink}
+            viewBox={`0 0 256 256`}
+          />
+        </div>
+      </div>
+      </div>)
+  } 
+}
