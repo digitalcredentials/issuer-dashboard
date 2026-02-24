@@ -148,6 +148,16 @@ export async function fetchFilteredTemplates(queryTerm: string) {
   }
 }
 
+export async function fetchTemplateById(id: string) {
+  try {
+    const template = await callStore(`template/${id}`, 'GET');
+    return template;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch template.');
+  }
+}
+
 export async function addNotification(credential_id: string, holder:Holder) {
   try {
     const response = await callStore('notification','POST', {credential_id, email: holder.email, holder_id: holder.id});
