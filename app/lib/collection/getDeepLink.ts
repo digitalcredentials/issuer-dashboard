@@ -1,6 +1,6 @@
 'use server';
 
-import { fetchCredentialById } from "../data";
+import { fetchCredentialById, fetchTemplateById } from "../data";
 
 const exchangeHost = process.env.EXCHANGE_HOST
 const timeToLive = 15552000000  // 15 minutes
@@ -12,6 +12,9 @@ export const getDeepLink =
         { holderId: string, credId: string, shouldIncludeEmail: boolean, deliveryFormat: string }) => {
         try {
             const { credential, holder } = await fetchCredentialById(credId);
+            const credTemplate = await fetchTemplateById(credential.cred_template_id);
+            const vc = credTemplate.template_json;
+            vc.name = holder.name
             const dataToPost = {
                 tenantName,
                 "data": [
