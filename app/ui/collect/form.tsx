@@ -10,9 +10,8 @@ import { Credential, CredentialForm } from '@/app/lib/definitions';
 import { lusitana } from '@/app/ui/fonts';
 
 import QRCode from "react-qr-code";
-import Link from 'next/link';
 
-export default function Form({credentials}:{credentials:Credential[]}) {
+export default function Form({credentials, pickupToken}:{credentials:Credential[], pickupToken: string}) {
   
   const initialState: State = { message: null, errors: {} };
   const [selectedCredential, setSelectedCredential] = useState<CredentialForm | undefined>(undefined); 
@@ -30,13 +29,14 @@ export default function Form({credentials}:{credentials:Credential[]}) {
       }
      <form action={formAction}> 
      <input type="hidden" name="credId" defaultValue={selectedCredential?.id}/>
+     <input type="hidden" name="pickupToken" defaultValue={pickupToken}/>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         
         {selectedCredential && !state.deepLink &&
           <>
           <div className="w-screen flex flex-col justify-center items-center">
             <h1 className={`${lusitana.className} text-center text-2xl p-4`}>You&apos;ve selected:</h1>
-           <div className="w-1/2 border rounded-lg border-black bg-white max-w-60 flex flex-col justify-center items-center">
+           <div className="w-1/2 border rounded-lg border-black bg-white max-w-300 flex flex-col justify-center items-center">
               
               
               <h2 className="text-center text-2xl p-4"> {selectedCredential.cred_name}</h2>
@@ -81,14 +81,14 @@ function EmailSelection ({emailAddress}:{emailAddress:string}) {
             <div className="flex gap-4">
               <div className="flex items-center">
                 <input
-                  id="pending"
+                  id="email"
                   name="shouldIncludeEmail"
                   type="radio"
-                  value="pending"
+                  value="true"
                   className="text-white-600 h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 focus:ring-2"
                 />
                 <label
-                  htmlFor="pending"
+                  htmlFor="email"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
                   Don&apos;t include email address
@@ -96,14 +96,14 @@ function EmailSelection ({emailAddress}:{emailAddress:string}) {
               </div>
               <div className="flex items-center">
                 <input
-                  id="paid"
+                  id="no-email"
                   name="shouldIncludeEmail"
                   type="radio"
-                  value="paid"
+                  value="false"
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
-                  htmlFor="paid"
+                  htmlFor="no-email"
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
                 >
                   Include email address 
