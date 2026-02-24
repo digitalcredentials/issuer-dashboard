@@ -5,6 +5,7 @@ import { z } from 'zod';
 //import { sign } from './sign';
 import { getDeepLink } from './getDeepLink';
 
+
 /* Incoming data:
 
 - holderId, credId, shouldIncludeEmail, deliveryFormat(plainVC,deepLinkLCW, ?)
@@ -40,11 +41,11 @@ export type State = {
     shouldIncludeEmail?: string[];
     deliveryFormat?: string[];
   };
-  message?: string | null;
+  message?: string | null | undefined;
   vc?: object;
 };
 
-export async function collectCredential(prevState: State, formData: FormData) {
+export async function collectCredential(prevState: State, formData: FormData) : Promise<any> {
 
     const session = await auth(); // Get the current session
     let userName;
