@@ -1,11 +1,11 @@
 'use server';
 
+import { notFound } from "next/navigation";
 import { fetchCredentialById, fetchHolderCredsByPickupToken, fetchTemplateById } from "../data";
 import { Credential } from "../definitions";
+import { getTenantToken } from "./tenants";
 const exchangeHost = process.env.EXCHANGE_HOST
 const timeToLive = 15552000000  // 15 minutes
-const tenantName = 'test';
-//const tenantAuthToken
 
 export const getDeepLink =
     async ({ pickupToken, credId, shouldIncludeEmail }:
@@ -14,8 +14,11 @@ export const getDeepLink =
             const { credential, holder } = await fetchCredentialById(credId);
             const holderCreds = await fetchHolderCredsByPickupToken(pickupToken)
             const doesHolderOwnCred = holderCreds.some((cred:Credential)=>cred.id===credential.id)
+            if (!doesHolderOwnCred) {return notFound()} 
             const credTemplate = await fetchTemplateById(credential.cred_template_id);
             const vc = credTemplate.template_json;
+            const tenantName = credential.tenant_name.toUpperCase()
+            const tenantAuthToken = getTenantToken(tenantName)
             vc.name = holder.name
             const dataToPost = {
                 tenantName,
@@ -30,7 +33,7 @@ export const getDeepLink =
             }
             // deeplinks look like this:
             //https://lcw.app/request.html?issuer=issuer.example.com&auth_type=bearer&challenge=50991c0d-e033-49c4-86aa-7f3620cf6937&vc_request_url=https://issuer.dcconsortium.org/exchange/e63007bc-6065-417c-8ae8-6b8fbc6a79df/50991c0d-e033-49c4-86aa-7f3620cf6937
-            const result = await postData(`${exchangeHost}/exchange/setup`, dataToPost)
+            const result = await postData(`${exchangeHost}/exchange/setup`, dataToPost, tenantAuthToken)
             const deepLink = result[0].directDeepLink;
             return deepLink
 
@@ -39,7 +42,7 @@ export const getDeepLink =
     }
 }
 
-async function postData(url = "", data = {}, tenantAuthToken: string = "notused") {
+async function postData(url = "", data = {}, tenantAuthToken: string) {
     try {
         const response = await fetch(url, {
             method: "POST",
