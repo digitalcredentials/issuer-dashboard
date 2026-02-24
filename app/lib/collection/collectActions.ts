@@ -29,6 +29,7 @@ construct and populate the VC, then sign it, or exchange it
 }); */
 
 const FormSchema = z.object({
+  pickupToken: z.string(),
   //holderId: z.string(),
   credId: z.string(),
   shouldIncludeEmail: z.string(),
@@ -37,6 +38,7 @@ const FormSchema = z.object({
  
 export type State = {
   errors?: {
+    pickupToken?: string[];
     credId?: string[];
     shouldIncludeEmail?: string[];
     deliveryFormat?: string[];
@@ -46,16 +48,19 @@ export type State = {
 };
 
 export async function collectCredential(prevState: State, formData: FormData) : Promise<any> {
-
-    const session = await auth(); // Get the current session
-    let userName;
-    if (!session?.user) {
-        throw new Error('You must sign in to do that.');
-    } else {
-        userName = session.user.email as string
-    }
+  console.log("in the collect creential")
+   // const session = await auth(); // Get the current session
+   // console.log("the session: ", session)
+   // let userName;
+   // if (!session?.user) {
+   //     throw new Error('You must sign in to do that.');
+   // } else {
+    //  console.log("in the collectCrdential server action, the user: ", session.user)
+    //    userName = session.user.email as string
+    //}
 
    const validatedFields = FormSchema.safeParse({
+    pickupToken: formData.get('pickupToken'),
     credId: formData.get('credId'),
     shouldIncludeEmail: formData.get('shouldIncludeEmail'),
     deliveryFormat: formData.get('deliveryFormat')
@@ -68,12 +73,12 @@ export async function collectCredential(prevState: State, formData: FormData) : 
     };
   }
 
-  const { credId, shouldIncludeEmail, deliveryFormat } = validatedFields.data;
+  const { credId, shouldIncludeEmail, deliveryFormat, pickupToken } = validatedFields.data;
  // TODO: want to directly deal with 404's from the signing service using notFound()
   try {
     // TODO: replace username, which for now is the email address of whoever is logged in, with organizational id.
    // const result = await sign({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
-    const deepLink = await getDeepLink({holderId: userName, credId, shouldIncludeEmail: true, deliveryFormat})
+    const deepLink = await getDeepLink({pickupToken, credId, shouldIncludeEmail: shouldIncludeEmail === 'true', deliveryFormat})
     return {deepLink}
   } catch (error) {
     // We'll also log the error to the console for now
