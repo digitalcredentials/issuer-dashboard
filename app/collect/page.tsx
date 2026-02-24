@@ -19,7 +19,7 @@ export default async function Page(props: {
   }
   return (
     <main className ="p-4">
-      <Form credentials={credentials}/>
+      <Form credentials={credentials} pickupToken={pickupToken}/>
     </main>
   );
 }
