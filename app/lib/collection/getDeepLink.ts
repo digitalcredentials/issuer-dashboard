@@ -1,17 +1,19 @@
 'use server';
 
-import { fetchCredentialById, fetchTemplateById } from "../data";
-
+import { fetchCredentialById, fetchHolderCredsByPickupToken, fetchTemplateById } from "../data";
+import { Credential } from "../definitions";
 const exchangeHost = process.env.EXCHANGE_HOST
 const timeToLive = 15552000000  // 15 minutes
 const tenantName = 'test';
 //const tenantAuthToken
 
 export const getDeepLink =
-    async ({ holderId, credId, shouldIncludeEmail }:
-        { holderId: string, credId: string, shouldIncludeEmail: boolean, deliveryFormat: string }) => {
+    async ({ pickupToken, credId, shouldIncludeEmail }:
+        { pickupToken: string, credId: string, shouldIncludeEmail: boolean, deliveryFormat: string }) => {
         try {
             const { credential, holder } = await fetchCredentialById(credId);
+            const holderCreds = await fetchHolderCredsByPickupToken(pickupToken)
+            const doesHolderOwnCred = holderCreds.some((cred:Credential)=>cred.id===credential.id)
             const credTemplate = await fetchTemplateById(credential.cred_template_id);
             const vc = credTemplate.template_json;
             vc.name = holder.name
