@@ -1,6 +1,6 @@
 let TENANT_LIST
 
-export const getTenantList = () => {
+const getTenantTokenList = () => {
     if (! TENANT_LIST) {
         try {
             const tenantEnvVars = Object.keys(process.env)
@@ -21,5 +21,5 @@ export const getTenantList = () => {
 
 export const getTenantToken = (tenantName: string) => {
     // @ts-expect-error
-    return getTenantList()[tenantName.toUpperCase()]
+    return getTenantTokenList()[tenantName.toUpperCase()]
 }
