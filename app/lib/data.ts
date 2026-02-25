@@ -138,6 +138,16 @@ export async function fetchAllTemplates() {
   }
 }
 
+export async function fetchAllTenants() {
+  try {
+    const tenants = await callStore(`tenants`, 'GET');
+    return tenants;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all tenants.');
+  }
+}
+
 export async function fetchFilteredTemplates(queryTerm: string) {
   try {
     const response = await callStore('templates/query','POST', {queryTerm});
