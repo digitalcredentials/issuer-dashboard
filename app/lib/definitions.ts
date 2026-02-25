@@ -59,10 +59,16 @@ export type FormattedTemplatesTable = {
   image_url: string;
 };
 
-export type TemplateField = {
+export type Tenant = {
   id: string;
   name: string;
-};
+  description: string;
+  email: string;
+  issuer_name: string;
+  issuer_url: string;
+  issuer_image_url: string;
+  env_name: string;
+}
 
 export type CredentialForm = {
   id: string;
