@@ -1,10 +1,13 @@
 import Form from '@/app/ui/credentials/create-form';
 import Breadcrumbs from '@/app/ui/credentials/breadcrumbs';
-import { fetchAllTemplates } from '@/app/lib/data';
+import { fetchAllTemplates, fetchAllTenants } from '@/app/lib/data';
  
 export default async function Page() {
-  const templates = await fetchAllTemplates();
- 
+  const [templates, tenants] = await Promise.all([
+    fetchAllTemplates(),
+    fetchAllTenants()
+  ])
+
   return (
     <main>
       <Breadcrumbs
@@ -17,7 +20,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Form templates={templates} />
+      <Form templates={templates} tenants={tenants} />
     </main>
   );
 }
