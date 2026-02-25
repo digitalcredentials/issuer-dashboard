@@ -1,6 +1,6 @@
 'use client';
 
-import { TemplateField, CredentialForm, Holder } from '@/app/lib/definitions';
+import { Template, Tenant } from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
   MagnifyingGlassCircleIcon,
@@ -17,9 +17,11 @@ import HolderLookupModal from '../holders/HolderLookupModal';
 export default function EditCredentialForm({
   credentialResult,
   templates,
+  tenants
 }: {
   credentialResult: any;
-  templates: TemplateField[];
+  templates: Template[];
+  tenants: Tenant[];
 }) {
   const credential = credentialResult.credential
   const initialState: State = { message: null, errors: {} };
@@ -79,10 +81,44 @@ export default function EditCredentialForm({
           </div>
         </div>
 
+{/* Tenant */}
+        <div className="mb-4">
+          <label htmlFor="tenant-id" className="mb-2 block text-sm font-medium">
+            Choose an issuer (who signs this credential)
+          </label>
+          <div className="relative">
+            <select
+              id="tenant-id"
+              name="tenantId"
+              className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              defaultValue={credential.tenant_id}
+              aria-describedby="tenant-id-error"
+            >
+              <option value="" disabled>
+                Select an issuer
+              </option>
+              {tenants.map((tenant) => (
+                <option key={tenant.id} value={tenant.id}>
+                  {tenant.name}
+                </option>
+              ))}
+            </select>
+            <TagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+          <div id="tenant-id-error" aria-live="polite" aria-atomic="true">
+            {state.errors?.tenantId &&
+              state.errors.tenantId.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
+        </div>
+
     {/* Credential Name */}
         <div className="mb-4">
           <label htmlFor="credName" className="mb-2 block text-sm font-medium">
-            Specify a name for this credential
+            Specify a name for this issuance (to later find it)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
