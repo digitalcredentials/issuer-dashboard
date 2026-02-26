@@ -11,17 +11,15 @@ export const getDeepLink =
     async ({ pickupToken, credId, shouldIncludeEmail }:
         { pickupToken: string, credId: string, shouldIncludeEmail: boolean, deliveryFormat: string }) => {
         try {
-            const { credential, holder } = await fetchCredentialById(credId);
+            const { credential, holder, template, tenant } = await fetchCredentialById(credId);
             const holderCreds = await fetchHolderCredsByPickupToken(pickupToken)
             const doesHolderOwnCred = holderCreds.some((cred:Credential)=>cred.id===credential.id)
             if (!doesHolderOwnCred) {return notFound()} 
-            const credTemplate = await fetchTemplateById(credential.cred_template_id);
-            const vc = credTemplate.template_json;
-            const tenantName = credential.tenant_name.toUpperCase()
-            const tenantAuthToken = getTenantToken(tenantName)
+            const vc = template.template_json;
+            const tenantAuthToken = getTenantToken(tenant.env_name)
             vc.name = holder.name
             const dataToPost = {
-                tenantName,
+                tenantName: tenant.env_name,
                 "data": [
                     {
                         "retrievalId": "single",
@@ -59,6 +57,8 @@ async function postData(url = "", data = {}, tenantAuthToken: string) {
         });
 
         if (!response.ok) {
+            console.log("Error with call:", url)
+            console.log("with data: ", data)
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const deepLink = await response.json();
