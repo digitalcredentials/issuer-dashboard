@@ -11,9 +11,9 @@ import { redirect } from 'next/navigation';
 const FormSchema = z.object({
   id: z.string(),
   orgId: z.string(),
-  name: z.string(),
+  name: z.string().trim().min(1, { message: "A holder name is required" }),
   did: z.string(),
-  email: z.string(),
+  email: z.string().trim().min(1, { message: "An email address is required." })
 });
  
 const CreateHolder = FormSchema.omit({ id: true });
@@ -30,13 +30,14 @@ export type State = {
 };
 
 export async function createHolder(prevState: State, formData: FormData) {
-
+  console.log("in the createHolder action")
     const session = await auth(); // Get the current session
     if (!session?.user) {
         throw new Error('You must be signed in to perform this action');
     } 
 
-   const validatedFields = CreateHolder.safeParse({did: formData.get('did'),
+   const validatedFields = CreateHolder.safeParse({
+    did: formData.get('did'),
     name: formData.get('name'),
     orgId: formData.get('orgId'),
     email: formData.get('email'),
