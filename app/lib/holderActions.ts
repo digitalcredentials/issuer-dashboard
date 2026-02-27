@@ -27,26 +27,37 @@ export type State = {
     email?: string[];
   };
   message?: string | null;
+  formData: {
+    orgId: string | undefined;
+    did: string | undefined;
+    name: string | undefined;
+    email: string | undefined;
+    id?: string | undefined;
+  }
 };
 
-export async function createHolder(prevState: State, formData: FormData) {
-  console.log("in the createHolder action")
+export async function createHolder(prevState: State, formData: FormData) : Promise<any> {
+ 
+
     const session = await auth(); // Get the current session
     if (!session?.user) {
         throw new Error('You must be signed in to perform this action');
     } 
 
-   const validatedFields = CreateHolder.safeParse({
-    did: formData.get('did'),
-    name: formData.get('name'),
-    orgId: formData.get('orgId'),
-    email: formData.get('email'),
-  });
+    const incomingFormValues = {
+      did: formData.get('did'),
+      name: formData.get('name'),
+      orgId: formData.get('orgId'),
+      email: formData.get('email'),
+  }
+
+   const validatedFields = CreateHolder.safeParse(incomingFormValues);
 
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Create Holder.',
+      formData: incomingFormValues
     };
   }
 
@@ -75,22 +86,25 @@ export async function deleteHolder(id: string) {
  // revalidatePath('/dashboard/holders');
 }
 
-export async function updateHolder(
+export async function updateHolder (
   id: string,
   prevState: State,
   formData: FormData,
-) {
-  const validatedFields = UpdateHolder.safeParse({
-    did: formData.get('did'),
-    name: formData.get('name'),
-    orgId: formData.get('orgId'),
-    email: formData.get('email'),
-  });
+) : Promise<any>  {
+
+      const incomingFormValues = {
+      did: formData.get('did'),
+      name: formData.get('name'),
+      orgId: formData.get('orgId'),
+      email: formData.get('email'),
+  }
+  const validatedFields = UpdateHolder.safeParse(incomingFormValues) ;
  
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Update Holder.',
+      formData: incomingFormValues
     };
   }
  
