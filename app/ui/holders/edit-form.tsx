@@ -16,7 +16,8 @@ export default function EditHolderForm({
 }: {
   holder: Holder;
 }) {
-  const initialState: State = { message: null, errors: {} };
+  console.log("the incoming holder object: ", holder)
+  const initialState: State = { message: null, errors: {}, formData: {name: holder.name, email: holder.email, orgId: holder.org_id, did: holder.did} };
   const updateCredentialWithId = updateHolder.bind(null, holder.id);
   const [state, formAction] = useActionState(updateCredentialWithId, initialState);
 
@@ -34,7 +35,7 @@ export default function EditHolderForm({
                 id="name"
                 name="name"
                 type="string"
-                defaultValue={holder.name}
+                defaultValue={state.formData.name}
                 placeholder="Enter a name for the holder"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
@@ -66,7 +67,7 @@ export default function EditHolderForm({
                 id="email"
                 name="email"
                 type="email"
-                defaultValue={holder.email}
+                defaultValue={state.formData.email}
                 placeholder="Enter an email address"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="email-error"
@@ -95,7 +96,7 @@ export default function EditHolderForm({
                 id="orgId"
                 name="orgId"
                 type="string"
-                defaultValue={holder.org_id}
+                defaultValue={state.formData.orgId}
                 placeholder="Enter an organizational id for the credential holder"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="orgId-error"
@@ -124,7 +125,7 @@ export default function EditHolderForm({
                 id="did"
                 name="did"
                 type="string"
-                defaultValue={holder.did}
+                defaultValue={state.formData.did}
                 placeholder="Enter a DID for the credential holder"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="did-error"
