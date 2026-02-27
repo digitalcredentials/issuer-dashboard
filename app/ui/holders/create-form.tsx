@@ -11,7 +11,7 @@ import { createHolder, State } from '@/app/lib/holderActions';
 import { useActionState } from 'react';
 
 export default function Form() {
-  const initialState: State = { message: null, errors: {} };
+  const initialState: State = { message: null, errors: {}, formData: {name: undefined, email: undefined, orgId: undefined, did: undefined} };
   const [state, formAction] = useActionState(createHolder, initialState);
 
   return (
@@ -29,6 +29,7 @@ export default function Form() {
                 id="name"
                 name="name"
                 type="string"
+                defaultValue={state.formData?.name as any}
                 placeholder="Enter a name for the holder"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
@@ -60,6 +61,7 @@ export default function Form() {
                 id="email"
                 name="email"
                 type="email"
+                defaultValue={state.formData?.email as any}
                 placeholder="Enter an email address"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="email-error"
@@ -88,6 +90,7 @@ export default function Form() {
                 id="orgId"
                 name="orgId"
                 type="string"
+                defaultValue={state.formData?.orgId as any}
                 placeholder="Enter an organizational id for the credential holder"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="orgId-error"
@@ -116,6 +119,7 @@ export default function Form() {
                 id="did"
                 name="did"
                 type="string"
+                defaultValue={state.formData?.did as any}
                 placeholder="Enter a DID for the credential holder"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="did-error"
