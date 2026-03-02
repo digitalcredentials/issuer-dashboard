@@ -16,13 +16,13 @@ const FormSchema = z.object({
     invalid_type_error: 'Please select a credential type.',
   }),
   tenantId: z.string({
-    invalid_type_error: 'Please select a credential type.',
+    invalid_type_error: 'Please select an issuer.',
   }),
   status: z.enum(['pending', 'notified', 'revoked', 'collected', 'deactivated'], {
     invalid_type_error: 'Please select a status.',
   }),
-  credName: z.string(),
-  holderId: z.string()
+  credName: z.string().trim().min(1, { message: "A credential name is required" }),
+  holderId: z.string().trim().min(1, { message: "You must select a holder" }),
 });
 
 const CreateCredential = FormSchema.omit({ id: true, status: true });
@@ -36,9 +36,15 @@ export type State = {
     credName?: string[];
   };
   message?: string | null;
+  formData: {
+    credName: string | undefined;
+    tenantId: string | undefined;
+    templateId: string | undefined;
+  }
+
 };
 
-export async function createCredential(prevState: State, formData: FormData) {
+export async function createCredential(prevState: State, formData: FormData) : Promise<any> {
 
   const session = await auth(); // Get the current session
   let userName;
@@ -48,18 +54,20 @@ export async function createCredential(prevState: State, formData: FormData) {
     userName = session.user.email as string
   }
 
-  const validatedFields = CreateCredential.safeParse({
+  const incomingFormValues = {
     templateId: formData.get('templateId'),
     tenantId: formData.get('tenantId'),
     credName: formData.get('credName'),
     holderId: formData.get('holderId'),
-  });
+  }
+  const validatedFields = CreateCredential.safeParse(incomingFormValues);
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Create Credential.',
+      formData: incomingFormValues
     };
   }
 
@@ -84,22 +92,25 @@ export async function createCredential(prevState: State, formData: FormData) {
 }
 
 
-export async function updateCredential(
+export async function updateCredential (
   id: string,
   prevState: State,
   formData: FormData,
-) {
-  const validatedFields = UpdateCredential.safeParse({
+) : Promise<any> {
+  const incomingFormValues = {
     templateId: formData.get('templateId'),
     tenantId: formData.get('tenantId'),
     credName: formData.get('credName'),
     holderId: formData.get('holderId'),
-  });
+  }
+  const validatedFields = UpdateCredential.safeParse(incomingFormValues);
 
+  
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Update Credential.',
+      formData: incomingFormValues
     };
   }
 
