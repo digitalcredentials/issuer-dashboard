@@ -16,7 +16,6 @@ export default function EditHolderForm({
 }: {
   holder: Holder;
 }) {
-  console.log("the incoming holder object: ", holder)
   const initialState: State = { message: null, errors: {}, formData: {name: holder.name, email: holder.email, orgId: holder.org_id, did: holder.did} };
   const updateCredentialWithId = updateHolder.bind(null, holder.id);
   const [state, formAction] = useActionState(updateCredentialWithId, initialState);
@@ -159,7 +158,7 @@ export default function EditHolderForm({
         >
           Cancel
         </Link>
-        <Button type="submit">Update Credential</Button>
+        <Button type="submit">Update Holder</Button>
       </div>
     </form>
   );
