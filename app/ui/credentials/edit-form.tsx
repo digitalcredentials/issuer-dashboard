@@ -24,7 +24,7 @@ export default function EditCredentialForm({
   tenants: Tenant[];
 }) {
   const credential = credentialResult.credential
-  const initialState: State = { message: null, errors: {} };
+  const initialState: State = { message: null, errors: {}, formData: {credName: credential.cred_name, tenantId: credentialResult.tenant.id, templateId: credentialResult.template.id}  };
   const updateCredentialWithId = updateCredential.bind(null, credential.id);
   const [state, formAction] = useActionState(updateCredentialWithId, initialState);
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -53,7 +53,7 @@ export default function EditCredentialForm({
                 id="holderId"
                 name="holderId"
                 type="hidden"
-                defaultValue={holder.id}
+                value={holder.id}
               />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Credential Template ID */}
@@ -66,7 +66,7 @@ export default function EditCredentialForm({
               id="template-id"
               name="templateId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={credential.cred_template_id}
+              defaultValue={state.formData?.templateId}
             >
               <option value="" disabled>
                 Select a credential template
@@ -91,7 +91,7 @@ export default function EditCredentialForm({
               id="tenant-id"
               name="tenantId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue={credential.tenant_id}
+              defaultValue={state.formData?.tenantId}
               aria-describedby="tenant-id-error"
             >
               <option value="" disabled>
@@ -126,7 +126,7 @@ export default function EditCredentialForm({
                 id="credName"
                 name="credName"
                 type="string"
-                defaultValue={credential.cred_name}
+                defaultValue={state.formData?.credName}
                 placeholder="Enter a name for the credential"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
@@ -148,7 +148,7 @@ export default function EditCredentialForm({
                 name="holder"
                 type="string"
                 placeholder="Click to find a holder"
-                defaultValue={holder.name}
+                value={holder.name}
                 onClick={findHolder}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="holder-error"
@@ -178,7 +178,7 @@ export default function EditCredentialForm({
                 id="email"
                 name="email"
                 type="email"
-                defaultValue={holder.email}
+                value={holder.email}
                 placeholder="Automatically set from holder search"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="email-error"
@@ -201,7 +201,7 @@ export default function EditCredentialForm({
                 id="org_id"
                 name="org_id"
                 type="org_id"
-                defaultValue={holder.org_id}
+                value={holder.org_id}
                 placeholder="Automatically set from holder search"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="email-error"
