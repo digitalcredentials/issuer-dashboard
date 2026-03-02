@@ -15,10 +15,11 @@ import ClientPortal from '../utils/clientPortal';
 import HolderLookupModal from '../holders/HolderLookupModal';
 
 export default function Form({ templates, tenants }: { templates: Template[], tenants: Tenant[] }) {
-  const initialState: State = { message: null, errors: {} };
+  const initialState: State = { message: null, errors: {}, formData: {credName: undefined, tenantId: undefined, templateId: undefined}   };
   const [state, formAction] = useActionState(createCredential, initialState);
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [holder, setHolder] = useState({name:'', did: '', org_id: '', email: '', id: undefined})
+  
   const findHolder = () => {
     setIsModalOpen(true);
   }
@@ -26,7 +27,6 @@ export default function Form({ templates, tenants }: { templates: Template[], te
     setHolder(holder);
     setIsModalOpen(false);
   }
-
   return (
      <form action={formAction}> 
       {isModalOpen && (
@@ -39,13 +39,17 @@ export default function Form({ templates, tenants }: { templates: Template[], te
           </div>
         </ClientPortal>
       )}
-              <input
-                id="holderId"
-                name="holderId"
-                type="hidden"
-                defaultValue={holder.id}
-              />
+
+      {/*The holderId which we don't show, but do want to submit*/}
+      <input
+        id="holderId"
+        name="holderId"
+        type="hidden"
+        defaultValue={holder.id}
+      />
+
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
+
         {/* Credential template */}
         <div className="mb-4">
           <label htmlFor="template-id" className="mb-2 block text-sm font-medium">
@@ -56,7 +60,7 @@ export default function Form({ templates, tenants }: { templates: Template[], te
               id="template-id"
               name="templateId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue=""
+              defaultValue={state.formData?.templateId}
               aria-describedby="template-id-error"
             >
               <option value="" disabled>
@@ -90,7 +94,7 @@ export default function Form({ templates, tenants }: { templates: Template[], te
               id="tenant-id"
               name="tenantId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              defaultValue=""
+              defaultValue={state.formData?.tenantId}
               aria-describedby="tenant-id-error"
             >
               <option value="" disabled>
@@ -125,6 +129,7 @@ export default function Form({ templates, tenants }: { templates: Template[], te
                 id="credName"
                 name="credName"
                 type="string"
+                defaultValue={state.formData?.credName}
                 placeholder="Enter a name for the credential"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="credName-error"
