@@ -3,10 +3,14 @@
 import { auth } from '@/auth';
 
 import { callStore } from './store';
-
+import * as fastcsv from '@fast-csv/parse';
+import { Readable } from 'node:stream';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 3;
+const ACCEPTED_MIME_TYPES = ["text/csv", "text/comma-separated-values", "text/x-csv", "application/csv", "application/vnd.ms-excel", "text/plain"];
 
 const FormSchema = z.object({
   templateId: z.string({invalid_type_error: 'Please select a credential type.'}),
@@ -17,6 +21,14 @@ const FormSchema = z.object({
     .refine((file) => file instanceof File && file.size > 0, {
       message: 'File is required',
     })
+    .refine(
+    (file) => file.size <= MAX_UPLOAD_SIZE,
+    `File size must be less than 3MB.`
+    )
+    .refine(
+      (file) => ACCEPTED_MIME_TYPES.includes(file.type),
+      `Only csv files are supported.`
+    )
 });
 
 export type State = {
@@ -51,7 +63,7 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
     templateId: formData.get('templateId'),
     tenantId: formData.get('tenantId'),
     batchName: formData.get('batchName'),
-    csv: formData.get('csv'),
+    csv: formData.get('csv') // const file = formData.get("csv") as File;
   }
   const validatedFields = FormSchema.safeParse(incomingFormValues);
 
@@ -66,6 +78,12 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
 
   // Prepare data for insertion into the database
   const { templateId, batchName, csv, tenantId } = validatedFields.data;
+
+  Readable.fromWeb(csv.stream() as any)
+    .pipe(fastcsv.parse({ headers: true }))
+    .on('error', error => console.error(error))
+    .on('data', row => console.log(row))
+    .on('end', (rowCount: number) => console.log(`Parsed ${rowCount} rows`));
 
   try {
 
