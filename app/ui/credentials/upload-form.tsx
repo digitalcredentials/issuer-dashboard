@@ -4,17 +4,16 @@ import { Template, Tenant } from '@/app/lib/definitions';
 import Link from 'next/link';
 import {
   UserCircleIcon,
-  AtSymbolIcon,
   TagIcon,
   MagnifyingGlassCircleIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { createCredential, State } from '@/app/lib/actions';
-import { useActionState, useState } from 'react';
+import { uploadBatch, State } from '@/app/lib/uploadAction';
+import { useActionState } from 'react';
 
 export default function Form({ templates, tenants }: { templates: Template[], tenants: Tenant[] }) {
-  const initialState: State = { message: null, errors: {}, formData: {credName: undefined, tenantId: undefined, templateId: undefined}   };
-  const [state, formAction] = useActionState(createCredential, initialState);
+  const initialState: State = { message: null, errors: {}, formData: {batchName: undefined, tenantId: undefined, templateId: undefined, csv: undefined}   };
+  const [state, formAction] = useActionState(uploadBatch, initialState);
   return (
      <form action={formAction}> 
 
@@ -90,26 +89,25 @@ export default function Form({ templates, tenants }: { templates: Template[], te
 
  {/* Batch Name */}
         <div className="mb-4">
-          <label htmlFor="credName" className="mb-2 block text-sm font-medium">
+          <label htmlFor="batchName" className="mb-2 block text-sm font-medium">
             Specify a name for this batch (to later find it)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
-              
               <input
-                id="credName"
-                name="credName"
+                id="batchName"
+                name="batchName"
                 type="string"
-                defaultValue={state.formData?.credName}
+                defaultValue={state.formData?.batchName}
                 placeholder="Enter a name for the batch"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby="credName-error"
+                aria-describedby="batchName-error"
               />
               <MagnifyingGlassCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-               <div id="credName-error" aria-live="polite" aria-atomic="true">
-                {state.errors?.credName &&
-                  state.errors.credName.map((error: string) => (
+               <div id="batchName-error" aria-live="polite" aria-atomic="true">
+                {state.errors?.batchName &&
+                  state.errors.batchName.map((error: string) => (
                     <p className="mt-2 text-sm text-red-500" key={error}>
                       {error}
                     </p>
@@ -121,7 +119,7 @@ export default function Form({ templates, tenants }: { templates: Template[], te
 
         {/* Upload */}
         <div className="mb-4">
-          <label htmlFor="holder" className="mb-2 block text-sm font-medium">
+          <label htmlFor="csv" className="mb-2 block text-sm font-medium">
             Upload your CSV file
           </label>
           <div className="relative mt-2 rounded-md">
@@ -130,6 +128,7 @@ export default function Form({ templates, tenants }: { templates: Template[], te
                 id="csv"
                 name="csv"
                 type="file"
+                defaultValue={state.formData?.csv}
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="csv-error"
               />
