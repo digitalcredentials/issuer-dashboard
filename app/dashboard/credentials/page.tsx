@@ -1,7 +1,7 @@
 import Pagination from '@/app/ui/pagination';
 import Search from '@/app/ui/search';
 import Table from '@/app/ui/credentials/table';
-import { CreateCredential } from '@/app/ui/credentials/buttons';
+import { AddCredential, UploadCredentials } from '@/app/ui/credentials/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { CredentialsTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
@@ -25,7 +25,7 @@ export default async function Page(props: {
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Search credentials..." />
-        <CreateCredential />
+        <AddCredential /><UploadCredentials/>
       </div>
       <Suspense key={query + currentPage} fallback={<CredentialsTableSkeleton />}>
         <Table query={query} currentPage={currentPage} />
