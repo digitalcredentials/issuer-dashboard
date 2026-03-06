@@ -28,9 +28,8 @@ const links = [
     href: '/dashboard/holders',
     icon: UserGroupIcon,
   },
-  { name: 'Credential Settings', href: '/dashboard/configuration', icon: UserGroupIcon },
-  { name: 'Email Settings', href: '/dashboard/email', icon: UserGroupIcon },
-  { name: 'Upload Credentials', href: '/dashboard/upload', icon: UserGroupIcon },
+  //{ name: 'Credential Settings', href: '/dashboard/configuration', icon: UserGroupIcon },
+ // { name: 'Email Settings', href: '/dashboard/email', icon: UserGroupIcon },
   { name: 'User Management', href: '/dashboard/users', icon: UserGroupIcon }
 ];
 
