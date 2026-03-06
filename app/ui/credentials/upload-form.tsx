@@ -8,7 +8,7 @@ import {
   MagnifyingGlassCircleIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { uploadBatch, State } from '@/app/lib/uploadAction';
+import { uploadBatch, State } from '@/app/lib/credentials/uploadAction';
 import { useActionState } from 'react';
 
 export default function Form({ templates, tenants }: { templates: Template[], tenants: Tenant[] }) {
