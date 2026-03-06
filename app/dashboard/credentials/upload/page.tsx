@@ -12,7 +12,8 @@ export default async function Page() {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Upload Credentials', href: '/dashboard/upload', active: true, }
+           { label: 'Credentials', href: '/dashboard/credentials' },
+          { label: 'Upload Credential Batch', href: '/dashboard/credentials/upload', active: true, }
         ]}
       />
       <Form templates={templates} tenants={tenants} />
