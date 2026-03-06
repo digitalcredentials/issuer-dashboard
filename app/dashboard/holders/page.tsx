@@ -1,7 +1,7 @@
 import Pagination from '@/app/ui/pagination';
 import Search from '@/app/ui/search';
 import Table from '@/app/ui/holders/table';
-import { CreateHolder } from '@/app/ui/holders/buttons';
+import { AddHolder, UploadHolders } from '@/app/ui/holders/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { HoldersTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
@@ -25,7 +25,7 @@ export default async function Page(props: {
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Search holders..." />
-        <CreateHolder />
+        <AddHolder /><UploadHolders/>
       </div>
       <Suspense key={query + currentPage} fallback={<HoldersTableSkeleton />}>
         <Table query={query} currentPage={currentPage} />
