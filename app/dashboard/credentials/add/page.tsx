@@ -14,8 +14,8 @@ export default async function Page() {
         breadcrumbs={[
           { label: 'Credentials', href: '/dashboard/credentials' },
           {
-            label: 'Issue Credential',
-            href: '/dashboard/credentials/create',
+            label: 'Add Credential',
+            href: '/dashboard/credentials/add',
             active: true,
           },
         ]}
