@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth';
 
-import { callStore } from './store';
+import { callStore } from '../store';
 import * as fastcsv from '@fast-csv/parse';
 import { Readable } from 'node:stream';
 import { z } from 'zod';
@@ -63,7 +63,7 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
     templateId: formData.get('templateId'),
     tenantId: formData.get('tenantId'),
     batchName: formData.get('batchName'),
-    csv: formData.get('csv') // const file = formData.get("csv") as File;
+    csv: formData.get('csv')
   }
   const validatedFields = FormSchema.safeParse(incomingFormValues);
 
@@ -78,16 +78,32 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
 
   // Prepare data for insertion into the database
   const { templateId, batchName, csv, tenantId } = validatedFields.data;
+  const batch:[] = [];
+
+  const processRow = (row:any) => {
+  /*  1. check the row's data to make sure required fields are there, emails are emails, etc.
+    2. add each row to an array, also have to add the templateId and 
+    hmmmmmmmmm, will also have to do some kind of lookup of the holder portion to make sure it isn't in the db already??????? like by email?
+    ORRRRRRR, maybe do the holder upload separately.
+    hmmmmmm, problem I think is if a new holder entry comes in that overwrites an existing entry. do we just overwrite??? or ask to overwrite???
+    3. when done, post the array.
+    4. add a new endpoint that takes the array, sets up a transaction, inserts the rows with:
+    INSERT INTO table_name (column1, column2, column3)
+VALUES
+(value1_row1, value2_row1, value3_row1),
+(value1_row2, value2_row2, value3_row2),
+(value1_row3, value2_row3, value3_row3);. */
+   }
 
   Readable.fromWeb(csv.stream() as any)
     .pipe(fastcsv.parse({ headers: true }))
     .on('error', error => console.error(error))
-    .on('data', row => console.log(row))
+    .on('data', row => processRow(row))
     .on('end', (rowCount: number) => console.log(`Parsed ${rowCount} rows`));
 
   try {
 
-  //  const result = await callStore('credential', 'POST', { holder_id: holderId, cred_name: credName, cred_template_id: templateId, tenant_id: tenantId, added_by: userName })
+    const result = await callStore('credential', 'POST', )
 
   } catch (error) {
     // We'll also log the error to the console for now
@@ -97,8 +113,8 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
     };
   }
 
-  revalidatePath('/dashboard/upload');
-  redirect('/dashboard/upload');
+  revalidatePath('/dashboard/credentials');
+  redirect('/dashboard/credentials');
 }
 
 
