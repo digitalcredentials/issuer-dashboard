@@ -4,7 +4,8 @@ type queryBody = {queryTerm:string,currentPage?:number};
 type credBody = {holder_id:string,cred_template_id:string,cred_name: string, tenant_id: string, added_by?: string}
 type holderBody = {name:string, email:string, did: string, org_id: string}
 type notificationBody = {credential_id:string, email:string}
-type storeBody = queryBody | credBody | holderBody | notificationBody
+type emailBody = string[]
+type storeBody = queryBody | credBody | holderBody | notificationBody | emailBody
 
 export const callStore = async (path : string, method: string, body?: storeBody) => {
   try {
