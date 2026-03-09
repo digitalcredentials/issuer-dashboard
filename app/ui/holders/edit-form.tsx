@@ -17,7 +17,7 @@ export default function EditHolderForm({
   holder: Holder;
 }) {
   const initialState: State = { message: null, errors: {}, formData: {name: holder.name, email: holder.email, orgId: holder.org_id, did: holder.did} };
-  const updateCredentialWithId = updateHolder.bind(null, holder.id);
+  const updateCredentialWithId = updateHolder.bind(null, holder.id as string);
   const [state, formAction] = useActionState(updateCredentialWithId, initialState);
 
   return (
