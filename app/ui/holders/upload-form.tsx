@@ -1,18 +1,23 @@
 'use client';
 
-import { Template, Tenant } from '@/app/lib/definitions';
 import Link from 'next/link';
-import {
-  UserCircleIcon,
-  TagIcon,
-  MagnifyingGlassCircleIcon
-} from '@heroicons/react/24/outline';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { uploadHolders, State } from '@/app/lib/holders/uploadAction';
 import { useActionState } from 'react';
 
+function ErrorListing({list}:{list:string[]}) {
+  return (
+    <ul className="list-disc list-inside ml-5 space-y-2 p-3">
+        {list.map((item,i) => (
+          <li key={i}> {item} </li>
+        ))}
+    </ul>
+  );
+}
+
 export default function Form() {
-  const initialState: State = { message: null, errors: {}, formData: {csv: undefined}   };
+  const initialState: State = { formData: {csv: undefined} };
   const [state, formAction] = useActionState(uploadHolders, initialState);
   return (
      <form action={formAction}> 
@@ -37,8 +42,8 @@ export default function Form() {
               <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
                <div id="csv-error" aria-live="polite" aria-atomic="true">
-                {state.errors?.csv &&
-                  state.errors.csv.map((error: string) => (
+                {state.errors?.formErrors?.csv &&
+                  state.errors.formErrors.csv.map((error: string) => (
                     <p className="mt-2 text-sm text-red-500" key={error}>
                       {error}
                     </p>
@@ -50,10 +55,21 @@ export default function Form() {
           <div id="general-error" aria-live="polite" aria-atomic="true">
             {state.errors &&
                 <p className="mt-2 text-sm text-red-500">
-                  {state.message}
+                  {state.errors.message}
                 </p>
               }
+
+         
           </div>
+            {state.errors?.errorType === 'duplicate-emails' &&
+                  <ErrorListing list={state.errors.duplicates}/>
+                }
+                {state.errors?.errorType === 'existing-holders' &&
+                  <ErrorListing list={state.errors.existingHolders}/>
+                }
+                {state.errors?.errorType === 'csv-row' &&
+                  <ErrorListing list={state.errors.rowErrors}/>
+                }
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
