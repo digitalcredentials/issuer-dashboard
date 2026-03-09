@@ -80,7 +80,7 @@ export type CredentialForm = {
 };
 
 export type Holder = {
-  id: string;
+  id?: string;
   org_id: string;
   name: string;
   email: string;
