@@ -7,6 +7,7 @@ import { callStore } from './store';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { Holder } from './definitions';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -39,10 +40,15 @@ export type State = {
 export async function createHolder(prevState: State, formData: FormData) : Promise<any> {
  
 
-    const session = await auth(); // Get the current session
-    if (!session?.user) {
-        throw new Error('You must be signed in to perform this action');
-    } 
+   const session = await auth(); // Get the current session
+  let userName;
+  if (!session?.user) {
+    throw new Error('You must be signed in to upload credentials.');
+  } else {
+    userName = session.user.email as string
+  }
+
+
 
     const incomingFormValues = {
       did: formData.get('did'),
@@ -64,7 +70,9 @@ export async function createHolder(prevState: State, formData: FormData) : Promi
   const { orgId, email, name, did } = validatedFields.data;
  
   try {
-    const result = await callStore('holder', 'POST', {email, name, did, org_id: orgId})
+     const holder : Holder = { did, email, name, org_id: orgId }
+     const data = {holder, added_by: userName}
+    const result = await callStore('holder', 'POST', data)
     // TODO: want to directly deal with 404's using notFound()
   } catch (error) {
     // We'll also log the error to the console for now
@@ -92,6 +100,14 @@ export async function updateHolder (
   formData: FormData,
 ) : Promise<any>  {
 
+     const session = await auth(); // Get the current session
+  let userName;
+  if (!session?.user) {
+    throw new Error('You must be signed in to upload credentials.');
+  } else {
+    userName = session.user.email as string
+  }
+
       const incomingFormValues = {
       did: formData.get('did'),
       name: formData.get('name'),
@@ -111,7 +127,9 @@ export async function updateHolder (
   const { did, email, name, orgId } = validatedFields.data;
  
   try {
-     const result = await callStore(`holder/${id}`, 'PUT', {email, name, org_id: orgId, did})
+     const holder : Holder = { did, email, name, org_id: orgId }
+     const data = {holder, added_by: userName}
+     const result = await callStore(`holder/${id}`, 'PUT', data)
   } catch (error) {
     return { message: 'Database Error: Failed to update holder.' };
   }
