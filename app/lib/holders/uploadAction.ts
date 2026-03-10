@@ -165,7 +165,7 @@ export async function uploadHolders(prevState: State, formData: FormData) : Prom
     }
 
 
-   //  check the database for duplicate email addresses
+   //  check that none of our new email addresses aren't already in the database
   try {
 
     const result = await callStore('holders/duplicates', 'POST', emailAddresses)
@@ -190,7 +190,23 @@ export async function uploadHolders(prevState: State, formData: FormData) : Prom
     };
   }
 
-  // Finally, upload to the store
+  // Finally, upload the holders to the store
+  try {
+    const data = {holders,added_by: userName}
+    const result = await callStore('holders', 'POST', data)
+    return {
+        success: 'Your holders have been added.',
+        formData: incomingFormValues
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      errors: {
+        errorType: 'network',
+        message: 'Database Error: Problem calling the store.'
+      }
+    };
+  }
 
 
   revalidatePath('/dashboard/holders');
