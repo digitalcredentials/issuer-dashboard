@@ -1,15 +1,16 @@
 import Form from '@/app/ui/credentials/edit-form';
 import Breadcrumbs from '@/app/ui/credentials/breadcrumbs';
-import { fetchCredentialById, fetchAllTemplates, fetchAllTenants } from '@/app/lib/data';
+import { fetchCredentialById, fetchAllTemplates, fetchAllTenants, fetchAllTags } from '@/app/lib/data';
  import { notFound } from 'next/navigation';
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
-  const [credentialResult, templates, tenants] = await Promise.all([
+  const [credentialResult, templates, tenants, tags] = await Promise.all([
     fetchCredentialById(id),
     fetchAllTemplates(),
-    fetchAllTenants()
+    fetchAllTenants(),
+    fetchAllTags()
   ]);
 
     if (!credentialResult) {
@@ -28,7 +29,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           },
         ]}
       />
-      <Form credentialResult={credentialResult} templates={templates} tenants={tenants}/>
+      <Form credentialResult={credentialResult} templates={templates} tenants={tenants} tags={tags}/>
     </main>
   );
 }
