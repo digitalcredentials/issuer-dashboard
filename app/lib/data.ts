@@ -51,6 +51,16 @@ export async function fetchFilteredHolders(
   }
 }
 
+export async function fetchAllCredentials() {
+  try {
+    const credentials = await callStore(`credentials`, 'GET');
+    return credentials;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all templates.');
+  }
+}
+
 export async function fetchCredentialsPages(queryTerm: string) {
   try {
     const count = await callStore('credentials/count', 'POST', {queryTerm});
@@ -145,6 +155,17 @@ export async function fetchAllTenants() {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all tenants.');
+  }
+}
+
+export async function fetchAllTags() {
+  try {
+    const tags = await callStore(`tags`, 'GET');
+    console.log("the tags: ", tags)
+    return tags;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all tags.');
   }
 }
 
