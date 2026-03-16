@@ -24,19 +24,10 @@ import {
 //Icons Imports
 import { AccountCircle, Send } from '@mui/icons-material';
 
-export type Employee = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  jobTitle: string;
-  salary: number;
-  startDate: string;
-  signatureCatchPhrase: string;
-  avatar: string;
-};
+import { Credential } from '@/app/lib/definitions';
 
-const Example = ({data}:{data:any}) => {
-  const columns = useMemo<MRT_ColumnDef<Employee>[]>(
+const Example = ({data}:{data:Credential[]}) => {
+  const columns = useMemo<MRT_ColumnDef<Credential>[]>(
     () => [
       
           {
@@ -76,7 +67,7 @@ const Example = ({data}:{data:any}) => {
             size: 150,
           },  
           {
-            accessorFn: (row) => new Date(row.date_added), //convert to Date for sorting and filtering
+            accessorFn: (row) => new Date(row.date_added as string), //convert to Date for sorting and filtering
             id: 'date_added',
             header: 'Date Added',
             filterVariant: 'date',
@@ -179,10 +170,11 @@ const Example = ({data}:{data:any}) => {
         });
       };
 
-      const handleActivate = () => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          alert('activating ' + row.getValue('name'));
-        });
+      const handleSelectedEdit = () => {
+        setShowModal
+       // table.getSelectedRowModel().flatRows.map((row) => {
+       //   alert('activating ' + row.getValue('name'));
+       // });
       };
 
       const handleContact = () => {
@@ -208,15 +200,10 @@ const Example = ({data}:{data:any}) => {
           </Box>
           <Box>
             <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-              
-              <Button
-                color="success"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleActivate}
-                variant="contained"
-              >
-                Edit Selected
-              </Button>
+              <FormDialog 
+              disabled={!table.getIsSomeRowsSelected()}
+              selectedRows={table.getSelectedRowModel().flatRows as any}/>
+
               <Button
                 color="info"
                 disabled={!table.getIsSomeRowsSelected()}
@@ -238,6 +225,7 @@ const Example = ({data}:{data:any}) => {
 //Date Picker Imports - these should just be in your Context Provider
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import FormDialog from './edit-selected-modal';
 
 const ExampleWithLocalizationProvider = ({data}:{data:any}) => (
   //App.tsx or AppProviders file
