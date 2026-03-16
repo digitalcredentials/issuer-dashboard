@@ -70,6 +70,12 @@ export type Tenant = {
   env_name: string;
 }
 
+export type Tag = {
+  id: string;
+  name: string;
+  description: string;
+}
+
 export type CredentialForm = {
   id: string;
   cred_template_id: string;
