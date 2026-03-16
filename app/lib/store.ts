@@ -1,7 +1,7 @@
 'use server';
 import { Holder } from "./definitions";
 type queryBody = {queryTerm:string,currentPage?:number};
-type credBody = {holder_id:string,cred_template_id:string,cred_name: string, tenant_id: string, added_by?: string}
+type credBody = {holder_id:string,cred_template_id:string,cred_name: string, tenant_id: string, tag_id: string,added_by?: string}
 type holderBody = {added_by:string, holder: Holder} //{name:string, email:string, did: string, org_id: string}
 type holdersBody = {added_by:string, holders: Holder[]}
 type notificationBody = {credential_id:string, email:string}
