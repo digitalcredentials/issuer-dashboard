@@ -18,7 +18,10 @@ const FormSchema = z.object({
   tenantId: z.string({
     invalid_type_error: 'Please select an issuer.',
   }),
-  status: z.enum(['pending', 'notified', 'revoked', 'collected', 'deactivated'], {
+  tagId: z.string({
+    invalid_type_error: 'Please select a tag.',
+  }),
+  status: z.enum(['hidden', 'collectable', 'revoked'], {
     invalid_type_error: 'Please select a status.',
   }),
   credName: z.string().trim().min(1, { message: "A credential name is required" }),
@@ -33,6 +36,7 @@ export type State = {
     templateId?: string[];
     tenantId?: string[];
     holderId?: string[];
+    tagId?: string[];
     credName?: string[];
   };
   message?: string | null;
@@ -40,6 +44,7 @@ export type State = {
     credName: string | undefined;
     tenantId: string | undefined;
     templateId: string | undefined;
+    tagId: string | undefined;
   }
 
 };
@@ -57,6 +62,7 @@ export async function createCredential(prevState: State, formData: FormData) : P
   const incomingFormValues = {
     templateId: formData.get('templateId'),
     tenantId: formData.get('tenantId'),
+    tagId: formData.get('tagId'),
     credName: formData.get('credName'),
     holderId: formData.get('holderId'),
   }
@@ -72,12 +78,12 @@ export async function createCredential(prevState: State, formData: FormData) : P
   }
 
   // Prepare data for insertion into the database
-  const { templateId, credName, holderId, tenantId } = validatedFields.data;
+  const { templateId, credName, holderId, tenantId, tagId } = validatedFields.data;
   // TODO: want to directly deal with 404's using notFound()
   try {
     // TODO the credType will be used to pick a vc template, populate it, and that populated template will be saved here to the store.
     // TODO move this into the data file
-    const result = await callStore('credential', 'POST', { holder_id: holderId, cred_name: credName, cred_template_id: templateId, tenant_id: tenantId, added_by: userName })
+    const result = await callStore('credential', 'POST', { holder_id: holderId, cred_name: credName, cred_template_id: templateId, tenant_id: tenantId, tag_id: tagId, added_by: userName })
 
   } catch (error) {
     // We'll also log the error to the console for now
@@ -100,6 +106,7 @@ export async function updateCredential (
   const incomingFormValues = {
     templateId: formData.get('templateId'),
     tenantId: formData.get('tenantId'),
+    tagId: formData.get('tagId'),
     credName: formData.get('credName'),
     holderId: formData.get('holderId'),
   }
@@ -114,10 +121,10 @@ export async function updateCredential (
     };
   }
 
-  const { templateId, credName, holderId, tenantId } = validatedFields.data;
+  const { templateId, credName, holderId, tenantId, tagId } = validatedFields.data;
 
   try {
-    const result = await callStore(`credential/${id}`, 'PUT', { holder_id: holderId, cred_template_id: templateId, tenant_id: tenantId, cred_name: credName })
+    const result = await callStore(`credential/${id}`, 'PUT', { holder_id: holderId, cred_template_id: templateId, tenant_id: tenantId, tag_id: tagId, cred_name: credName })
   } catch (error) {
     return { message: 'Database Error: Failed to pdate credential.' };
   }
