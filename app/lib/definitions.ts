@@ -18,6 +18,8 @@ export type Credential = {
   holder_id: string;
   date: string;
   status: 'pending' | 'collected' | 'pending' | 'notified' | 'deactivated';
+  date_added?: string;
+  tenant_issuer_name?: string;
 };
 
 export type CredsByMonth = {
