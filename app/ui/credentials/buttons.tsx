@@ -1,6 +1,6 @@
 import { InboxIcon, PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteCredential, notifyHolder } from '@/app/lib/actions';
+import { deleteCredential, notifyHolder } from '@/app/lib/credentials/actions';
 
 export function AddCredential() {
   return (

@@ -9,7 +9,7 @@ import {
   MagnifyingGlassCircleIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import { createCredential, State } from '@/app/lib/actions';
+import { createCredential, State } from '@/app/lib/credentials/actions';
 import { useActionState, useState } from 'react';
 import ClientPortal from '../utils/clientPortal';
 import HolderLookupModal from '../holders/HolderLookupModal';
@@ -121,7 +121,7 @@ export default function Form({ templates, tenants, tags }: { templates: Template
  {/* tag */}
         <div className="mb-4">
           <label htmlFor="tag-id" className="mb-2 block text-sm font-medium">
-            Choose a tag (to associate with other credentials)
+            Choose a tag (to group with other credentials)
           </label>
           <div className="relative">
             <select

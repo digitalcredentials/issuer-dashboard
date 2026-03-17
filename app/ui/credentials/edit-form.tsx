@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateCredential, State } from '@/app/lib/actions';
+import { updateCredential, State } from '@/app/lib/credentials/actions';
 import { useActionState, useState } from 'react';
 import ClientPortal from '../utils/clientPortal';
 import HolderLookupModal from '../holders/HolderLookupModal';
