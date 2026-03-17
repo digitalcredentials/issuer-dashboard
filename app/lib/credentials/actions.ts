@@ -3,12 +3,12 @@
 import { signIn, auth } from '@/auth';
 
 import { AuthError } from 'next-auth';
-import { callStore } from './store';
+import { callStore } from '../store';
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { notify } from './email/notify';
+import { notify } from '../email/notify';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -21,7 +21,7 @@ const FormSchema = z.object({
   tagId: z.string({
     invalid_type_error: 'Please select a tag.',
   }),
-  status: z.enum(['hidden', 'collectable', 'revoked'], {
+  status: z.enum(['hidden', 'collectable'], {
     invalid_type_error: 'Please select a status.',
   }),
   credName: z.string().trim().min(1, { message: "A credential name is required" }),
