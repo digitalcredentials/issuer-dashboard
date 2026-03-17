@@ -24,9 +24,10 @@ import {
 //Icons Imports
 import { AccountCircle, Send } from '@mui/icons-material';
 
-import { Credential } from '@/app/lib/definitions';
+import { Credential, Tag, Template, Tenant } from '@/app/lib/definitions';
 
-const Example = ({data}:{data:Credential[]}) => {
+const Example = ({data, tenants, templates, tags}:{data:Credential[], templates: Template[], tenants: Tenant[], tags: Tag[]}) => {
+ console.log("the data: ", data)
   const columns = useMemo<MRT_ColumnDef<Credential>[]>(
     () => [
       
@@ -52,6 +53,18 @@ const Example = ({data}:{data:Credential[]}) => {
             accessorKey: 'holder_name', //hey a simple column for once
             header: 'Holder',
             size: 200,
+          },
+          {
+            accessorKey: 'template_name', //hey a simple column for once
+            header: 'Template',
+            filterVariant: 'select',
+            size: 200,
+          },
+          {
+            accessorKey: 'tenant_issuer_name', //hey a simple column for once
+            header: 'Tenant',
+            filterVariant: 'select',
+            size: 300,
           },
           {
             accessorKey: 'tag_name', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
@@ -91,6 +104,9 @@ const Example = ({data}:{data:Credential[]}) => {
     enableColumnFilterModes: false,
     enableColumnOrdering: false,
     enableGrouping: false,
+    
+    enableStickyHeader: true,
+    enableStickyFooter: true,
     enableColumnPinning: false,
     enableFacetedValues: true,
     enableRowActions: true,
@@ -105,6 +121,7 @@ const Example = ({data}:{data:Credential[]}) => {
     },
     paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
+    muiTableContainerProps: { sx: { maxHeight: '600px' } },
     muiSearchTextFieldProps: {
       size: 'small',
       variant: 'outlined',
@@ -171,7 +188,7 @@ const Example = ({data}:{data:Credential[]}) => {
       };
 
       const handleSelectedEdit = () => {
-        setShowModal
+        
        // table.getSelectedRowModel().flatRows.map((row) => {
        //   alert('activating ' + row.getValue('name'));
        // });
@@ -202,7 +219,10 @@ const Example = ({data}:{data:Credential[]}) => {
             <Box sx={{ display: 'flex', gap: '0.5rem' }}>
               <FormDialog 
               disabled={!table.getIsSomeRowsSelected()}
-              selectedRows={table.getSelectedRowModel().flatRows as any}/>
+              selectedRows={table.getSelectedRowModel().flatRows as any}
+              tenants={tenants}
+              templates={templates}
+              tags={tags}/>
 
               <Button
                 color="info"
@@ -227,10 +247,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import FormDialog from './edit-selected-modal';
 
-const ExampleWithLocalizationProvider = ({data}:{data:any}) => (
+const ExampleWithLocalizationProvider = ({data, tenants, templates, tags}:{data:any, templates: Template[], tenants: Tenant[], tags: Tag[]}) => (
   //App.tsx or AppProviders file
   <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <Example data={data}/>
+    <Example data={data} tenants={tenants} templates={templates} tags={tags}/>
   </LocalizationProvider>
 );
 
