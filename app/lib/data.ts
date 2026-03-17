@@ -161,7 +161,6 @@ export async function fetchAllTenants() {
 export async function fetchAllTags() {
   try {
     const tags = await callStore(`tags`, 'GET');
-    console.log("the tags: ", tags)
     return tags;
   } catch (err) {
     console.error('Database Error:', err);
