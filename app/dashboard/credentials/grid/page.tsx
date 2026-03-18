@@ -1,5 +1,5 @@
 import { fetchAllCredentials, fetchAllTags, fetchAllTemplates, fetchAllTenants } from '@/app/lib/data';
-import Example from '@/app/ui/credentials/grid'
+import CredentialGrid from '@/app/ui/credentials/grid'
 
 export default async function Page() {
   
@@ -10,7 +10,7 @@ export default async function Page() {
 
   return (
     <div className="w-full">
-        <Example data={allCreds} tenants={tenants} templates={templates} tags={tags}/>
+        <CredentialGrid data={allCreds} tenants={tenants} templates={templates} tags={tags}/>
     </div>
   );
 }
