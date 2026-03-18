@@ -18,8 +18,6 @@ export async function notify(credentialId:string) {
       from: process.env.EMAIL_FROM as string, 
       subject: "You have credentials available."
     }) 
-     // update the status in the credential table??? 
-     //   Probably better to use the notifications table for that
 
     return {success: true, collectionPageURL};
   } catch (error) {
