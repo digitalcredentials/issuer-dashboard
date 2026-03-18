@@ -15,18 +15,23 @@ import {
 import {
   Box,
   Button,
+  IconButton,
   ListItemIcon,
   MenuItem,
+  Tooltip,
   Typography,
   lighten,
 } from '@mui/material';
 
 //Icons Imports
-import { AccountCircle, Send } from '@mui/icons-material';
+import { AccountCircle, MailLockOutlined, MailOutline, MailOutlineOutlined, Send } from '@mui/icons-material';
+
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Credential, Tag, Template, Tenant } from '@/app/lib/definitions';
 
-const Example = ({data, tenants, templates, tags}:{data:Credential[], templates: Template[], tenants: Tenant[], tags: Tag[]}) => {
+const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Template[], tenants: Tenant[], tags: Tag[]}) => {
  console.log("the data: ", data)
   const columns = useMemo<MRT_ColumnDef<Credential>[]>(
     () => [
@@ -34,7 +39,7 @@ const Example = ({data, tenants, templates, tags}:{data:Credential[], templates:
           {
        //     accessorFn: (row) => `${row.firstName} ${row.lastName}`, //accessorFn used to join multiple data into a single cell
             accessorKey: 'cred_name', //id is still required when using accessorFn instead of accessorKey
-            header: 'Name',
+            header: 'Description',
             size: 200,
             Cell: ({ renderedCellValue, row }) => (
               <Box
@@ -55,6 +60,18 @@ const Example = ({data, tenants, templates, tags}:{data:Credential[], templates:
             size: 200,
           },
           {
+            accessorKey: 'tag_name', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
+            filterVariant: 'select',
+            header: 'Tag',
+            size: 100,
+          },  
+          {
+            accessorKey: 'status', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
+            filterVariant: 'select',
+            header: 'Status',
+            size: 50,
+          },  
+          {
             accessorKey: 'template_name', //hey a simple column for once
             header: 'Template',
             filterVariant: 'select',
@@ -66,12 +83,6 @@ const Example = ({data, tenants, templates, tags}:{data:Credential[], templates:
             filterVariant: 'select',
             size: 300,
           },
-          {
-            accessorKey: 'tag_name', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
-            filterVariant: 'select',
-            header: 'Tag',
-            size: 200,
-          },  
           {
             accessorKey: 'holder_email', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
             enableClickToCopy: true,
@@ -112,7 +123,7 @@ const Example = ({data, tenants, templates, tags}:{data:Credential[], templates:
     enableRowActions: true,
     enableRowSelection: true,
     initialState: {
-      showColumnFilters: true,
+      showColumnFilters: false,
       showGlobalFilter: true,
       columnPinning: {
         left: ['mrt-row-expand', 'mrt-row-select'],
@@ -152,6 +163,27 @@ const Example = ({data, tenants, templates, tags}:{data:Credential[], templates:
         </Box>
       </Box>
     ),
+    
+    renderRowActions: ({ row, table }) => (
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Tooltip title="Edit">
+           <Link
+      href={`/dashboard/credentials/${row.original.id}/edit`}
+      className="rounded-md border p-2 hover:bg-gray-100"
+    >
+      <PencilIcon className="w-5" />  
+    </Link>
+         {/*  <IconButton onClick={() => table.setEditingRow(row)}>
+            <EditIcon />
+          </IconButton> */}
+        </Tooltip>
+        <Tooltip title="Notify">
+          <IconButton  onClick={() => notify(row.original.id) }>
+            <MailOutline />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ),
     renderRowActionMenuItems: ({ closeMenu }) => [
       <MenuItem
         key={0}
@@ -180,6 +212,14 @@ const Example = ({data, tenants, templates, tags}:{data:Credential[], templates:
         Notify via Email
       </MenuItem>,
     ],
+    muiTablePaperProps: {
+      elevation: 0, //remove the mui box shadow
+      //customize paper styles to get rid of border
+      sx: {
+        borderRadius: '0',
+        border: '0px',
+      },
+  },
     renderTopToolbar: ({ table }) => {
       const handleDeactivate = () => {
         table.getSelectedRowModel().flatRows.map((row) => {
@@ -246,12 +286,15 @@ const Example = ({data, tenants, templates, tags}:{data:Credential[], templates:
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import FormDialog from './edit-selected-modal';
+import Link from 'next/link';
+import { PencilIcon } from '@heroicons/react/24/outline';
+import { notify } from '@/app/lib/email/notify';
 
-const ExampleWithLocalizationProvider = ({data, tenants, templates, tags}:{data:any, templates: Template[], tenants: Tenant[], tags: Tag[]}) => (
+const CredentialGrid = ({data, tenants, templates, tags}:{data:any, templates: Template[], tenants: Tenant[], tags: Tag[]}) => (
   //App.tsx or AppProviders file
   <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <Example data={data} tenants={tenants} templates={templates} tags={tags}/>
+    <Grid data={data} tenants={tenants} templates={templates} tags={tags}/>
   </LocalizationProvider>
 );
 
-export default ExampleWithLocalizationProvider;
+export default CredentialGrid;
