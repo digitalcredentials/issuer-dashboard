@@ -2,12 +2,12 @@
  
 import { auth } from '@/auth';
 
-import { callStore } from './store';
+import { callStore } from '../store';
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { Holder } from './definitions';
+import { Holder } from '../definitions';
 
 const FormSchema = z.object({
   id: z.string(),
