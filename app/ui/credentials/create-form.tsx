@@ -120,9 +120,12 @@ export default function Form({ templates, tenants, tags }: { templates: Template
 
  {/* tag */}
         <div className="mb-4">
-          <label htmlFor="tag-id" className="mb-2 block text-sm font-medium">
-            Choose a tag (to group with other credentials)
-          </label>
+          <div className="flex justify-between">
+            <label htmlFor="tag-id" className="mb-2 block text-sm font-medium">
+              Choose a tag (to group with other credentials) 
+            </label>
+            <div >Create New Tag</div>
+          </div>
           <div className="relative">
             <select
               id="tag-id"
@@ -156,7 +159,7 @@ export default function Form({ templates, tenants, tags }: { templates: Template
  {/* Credential Name */}
         <div className="mb-4">
           <label htmlFor="credName" className="mb-2 block text-sm font-medium">
-            Specify a name for this issuance (to later find it)
+            Provide a short description (to later find this credential)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -165,7 +168,7 @@ export default function Form({ templates, tenants, tags }: { templates: Template
                 name="credName"
                 type="string"
                 defaultValue={state.formData?.credName}
-                placeholder="Enter a name for the credential"
+                placeholder="Enter a short description for the credential"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="credName-error"
               />
