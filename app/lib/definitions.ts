@@ -73,7 +73,8 @@ export type Tenant = {
 }
 
 export type Tag = {
-  id: string;
+  date_added?: string;
+  id?: string;
   name: string;
   description: string;
 }
