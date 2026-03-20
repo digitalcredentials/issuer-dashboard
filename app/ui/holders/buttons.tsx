@@ -1,6 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteHolder } from '@/app/lib/holderActions';
+import { deleteHolder } from '@/app/lib/holders/actions';
 
 export function AddHolder() {
   return (
