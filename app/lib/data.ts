@@ -103,6 +103,16 @@ export async function fetchHolderById(id: string) {
   }
 }
 
+export async function fetchTagById(id: string) {
+  try {
+    const tag = await callStore(`tag/${id}`, 'GET');
+    return tag;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch tag.');
+  }
+}
+
 export async function fetchHolderCredsById(
   id: string
 ) {
