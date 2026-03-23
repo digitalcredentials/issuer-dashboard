@@ -9,18 +9,18 @@ import { redirect } from 'next/navigation';
 import { notify } from '../email/notify';
 
 const FormSchema = z.object({
-  templateId: z.string({
-    invalid_type_error: 'Please select a credential type.',
-  }),
+   templateId: z.string({
+    invalid_type_error: 'Please select a template.',
+  }).refine(val => val !== 'select', {message: 'Please select a template.'}),
   tenantId: z.string({
     invalid_type_error: 'Please select an issuer.',
-  }),
+  }).refine(val => val !== 'select', {message: 'Please select an issuer.'}),
   tagId: z.string({
     invalid_type_error: 'Please select a tag.',
-  }),
+  }).refine(val => val !== 'select', {message: 'Please select a tag.'}),
   status: z.enum(['hidden', 'collectable'], {
-    invalid_type_error: 'Please select a status (visibility).',
-  })
+    invalid_type_error: 'Please select a status.',
+  }),
 });
 
 export type State = {
