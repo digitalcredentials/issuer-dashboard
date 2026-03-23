@@ -24,15 +24,12 @@ import {
 } from '@mui/material';
 
 //Icons Imports
-import { AccountCircle, MailLockOutlined, MailOutline, MailOutlineOutlined, Send } from '@mui/icons-material';
-
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { AccountCircle, MailOutline, Send } from '@mui/icons-material';
 
 import { Credential, Tag, Template, Tenant } from '@/app/lib/definitions';
 
 const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Template[], tenants: Tenant[], tags: Tag[]}) => {
- console.log("the data: ", data)
+
   const columns = useMemo<MRT_ColumnDef<Credential>[]>(
     () => [
       
@@ -124,6 +121,10 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
     enableRowSelection: true,
     initialState: {
       showColumnFilters: false,
+      pagination: {
+        pageIndex: 0,
+        pageSize: 25, 
+      },
       showGlobalFilter: true,
       columnPinning: {
         left: ['mrt-row-expand', 'mrt-row-select'],
@@ -139,7 +140,7 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
     },
     muiPaginationProps: {
       color: 'secondary',
-      rowsPerPageOptions: [10, 30, 100],
+      rowsPerPageOptions: [25, 50, 100],
       shape: 'rounded',
       variant: 'outlined',
     },
@@ -188,7 +189,6 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
       <MenuItem
         key={0}
         onClick={() => {
-          // View profile logic...
           closeMenu();
         }}
         sx={{ m: 0 }}
@@ -201,7 +201,6 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
       <MenuItem
         key={1}
         onClick={() => {
-          // Send email logic...
           closeMenu();
         }}
         sx={{ m: 0 }}
@@ -221,18 +220,6 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
       },
   },
     renderTopToolbar: ({ table }) => {
-      const handleDeactivate = () => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          alert('deactivating ' + row.getValue('name'));
-        });
-      };
-
-      const handleSelectedEdit = () => {
-        
-       // table.getSelectedRowModel().flatRows.map((row) => {
-       //   alert('activating ' + row.getValue('name'));
-       // });
-      };
 
       const handleContact = () => {
         table.getSelectedRowModel().flatRows.map((row) => {
@@ -258,17 +245,18 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
           <Box>
             <Box sx={{ display: 'flex', gap: '0.5rem' }}>
               <FormDialog 
-              disabled={!table.getIsSomeRowsSelected()}
-              selectedRows={table.getSelectedRowModel().flatRows as any}
-              tenants={tenants}
-              templates={templates}
-              tags={tags}/>
+                disabled={!table.getIsSomeRowsSelected()}
+                selectedRows={table.getSelectedRowModel().flatRows as any}
+                tenants={tenants}
+                templates={templates}
+                tags={tags}
+              />
 
               <Button
-                color="info"
+                
                 disabled={!table.getIsSomeRowsSelected()}
                 onClick={handleContact}
-                variant="contained"
+                variant="outlined"
               >
                 Notify Selected
               </Button>
