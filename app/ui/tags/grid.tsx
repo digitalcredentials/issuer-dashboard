@@ -96,7 +96,7 @@ const Grid = ({data}:{data:Tag[]}) => {
     enableColumnPinning: false,
     enableFacetedValues: true,
     enableRowActions: true,
-    enableRowSelection: true,
+    enableRowSelection: false,
     initialState: {
       showColumnFilters: false,
       showGlobalFilter: true,
