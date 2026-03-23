@@ -1,7 +1,7 @@
 'use server';
 import { Holder, Tag } from "./definitions";
 type queryBody = {queryTerm:string,currentPage?:number};
-type credBody = {holder_id:string,cred_template_id:string,cred_name: string, tenant_id: string, tag_id: string,added_by?: string}
+type credBody = {holder_id:string,cred_template_id:string,cred_name: string, tenant_id: string, status: string, tag_id: string,added_by?: string}
 type bulkCredUpdateBody = {cred_ids:string,cred_template_id:string,status: string, tenant_id: string, tag_id: string,updated_by?: string}
 
 type tagBody = {tag: Tag}
