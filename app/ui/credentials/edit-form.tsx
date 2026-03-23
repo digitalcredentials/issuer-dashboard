@@ -3,6 +3,8 @@
 import { Template, Tenant, Tag } from '@/app/lib/definitions';
 import {
   AtSymbolIcon,
+  CheckIcon,
+  EyeSlashIcon,
   MagnifyingGlassCircleIcon,
   TagIcon,
   UserCircleIcon,
@@ -25,8 +27,9 @@ export default function EditCredentialForm({
   tenants: Tenant[];
   tags: Tag[];
 }) {
+
   const credential = credentialResult.credential
-  const initialState: State = { message: null, errors: {}, formData: {credName: credential.cred_name, tenantId: credentialResult.tenant.id, templateId: credentialResult.template.id, tagId: credentialResult.tag.id}  };
+  const initialState: State = { message: null, errors: {}, formData: {credName: credential.cred_name, holderId: credentialResult.holder.id, status: credential.status, tenantId: credentialResult.tenant.id, templateId: credentialResult.template.id, tagId: credentialResult.tag.id}  };
   const updateCredentialWithId = updateCredential.bind(null, credential.id);
   const [state, formAction] = useActionState(updateCredentialWithId, initialState);
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -130,7 +133,7 @@ export default function EditCredentialForm({
               defaultValue={state.formData?.tagId}
               aria-describedby="tag-id-error"
             >
-              <option value="" disabled>
+              <option value="select" disabled>
                 Select a tag
               </option>
               {tags.map((tag) => (
@@ -151,6 +154,8 @@ export default function EditCredentialForm({
           </div>
         </div>
 
+     
+
     {/* Credential Name */}
         <div className="mb-4">
           <label htmlFor="credName" className="mb-2 block text-sm font-medium">
@@ -168,13 +173,21 @@ export default function EditCredentialForm({
               />
               <MagnifyingGlassCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+            <div id="credName-error" aria-live="polite" aria-atomic="true">
+                {state.errors?.credName &&
+                  state.errors.credName.map((error: string) => (
+                    <p className="mt-2 text-sm text-red-500" key={error}>
+                      {error}
+                    </p>
+                  ))}
+                </div>
           </div>
         </div>
 
  {/* Holder Name */}
         <div className="mb-4">
           <label htmlFor="holder" className="mb-2 block text-sm font-medium">
-            Choose a holder (click field to search)
+            Choose a holder (click the field to search)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -247,6 +260,64 @@ export default function EditCredentialForm({
           </div>
         </div>
 
+   {/*  Status */}
+        <fieldset>
+          <legend className="mb-2 block text-sm font-medium">
+            Set the status (whether the holder can see and collect the credential)
+          </legend>
+          <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
+            <div className="flex gap-4">
+              <div className="flex items-center">
+                <input
+                  id="hidden"
+                  name="status"
+                  defaultChecked={state.formData?.status === 'hidden'}
+                  type="radio"
+                  value="hidden"
+                  className="text-white-600 h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 focus:ring-2 peer"
+                />
+                <label
+                  htmlFor="hidden"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-500 peer-checked:bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
+                >
+                  Hidden <EyeSlashIcon className="h-4 w-4" />
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="collectable"
+                  name="status"
+                  type="radio"
+                  value="collectable"
+                  defaultChecked={state.formData?.status === 'collectable'}
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 peer"
+                />
+                <label
+                  htmlFor="collectable"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-500 peer-checked:bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
+                >
+                  Collectable <CheckIcon className="h-4 w-4" />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div id="status-error" aria-live="polite" aria-atomic="true">
+            {state.errors?.status &&
+              state.errors.status.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
+        </fieldset>
+        
+         <div id="general-error" aria-live="polite" aria-atomic="true">
+            {state.errors &&
+                <p className="mt-2 text-sm text-red-500">
+                  {state.message}
+                </p>
+              }
+          </div>
 
       </div>
       <div className="mt-6 flex justify-end gap-4">
