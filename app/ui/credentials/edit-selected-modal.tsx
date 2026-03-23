@@ -16,9 +16,9 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function FormDialog({selectedRows, disabled, tenants, templates, tags}:{selectedRows:any, disabled: boolean, templates: Template[], tenants: Tenant[], tags: Tag[]}) {
- console.log(selectedRows)
+
     const [open, setOpen] = React.useState(false);
-  const initialState: State = { message: null, errors: {}, formData: {tenantId: undefined, templateId: undefined, tagId: undefined, status: undefined}   };
+  const initialState: State = { message: null, errors: {}, formData: {tenantId: 'select', templateId: 'select', tagId: 'select', status: undefined}   };
   const updateCredentialsWithIds = updateCredentials.bind(null, selectedRows.map((row:any)=>row.original.id).join());
   const [state, formAction] = useActionState(updateCredentialsWithIds, initialState);
 
@@ -28,15 +28,6 @@ export default function FormDialog({selectedRows, disabled, tenants, templates, 
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const formJson = Object.fromEntries((formData as any).entries());
-    const email = formJson.email;
-    console.log(email);
-    handleClose();
   };
 
   return (
@@ -64,9 +55,10 @@ export default function FormDialog({selectedRows, disabled, tenants, templates, 
               name="templateId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue={state.formData?.templateId}
+              key={state.formData?.templateId}
               aria-describedby="template-id-error"
             >
-              <option value="" disabled>
+              <option value="select" >
                 Select a template
               </option>
               {templates.map((template) => (
@@ -98,9 +90,10 @@ export default function FormDialog({selectedRows, disabled, tenants, templates, 
               name="tenantId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue={state.formData?.tenantId}
+              key={state.formData?.tenantId}
               aria-describedby="tenant-id-error"
             >
-              <option value="" disabled>
+              <option value="select">
                 Select an issuer
               </option>
               {tenants.map((tenant) => (
@@ -132,9 +125,10 @@ export default function FormDialog({selectedRows, disabled, tenants, templates, 
               name="tagId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue={state.formData?.tagId}
+              key={state.formData?.tagId}
               aria-describedby="tag-id-error"
             >
-              <option value="" disabled>
+              <option value="select">
                 Select a tag
               </option>
               {tags.map((tag) => (
@@ -167,11 +161,12 @@ export default function FormDialog({selectedRows, disabled, tenants, templates, 
                   name="status"
                   type="radio"
                   value="hidden"
-                  className="text-white-600 h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 focus:ring-2"
+                  defaultChecked={state.formData?.status === 'hidden'}
+                  className="text-white-600 h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 focus:ring-2 peer"
                 />
                 <label
                   htmlFor="hidden"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-500 peer-checked:bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Hidden <EyeSlashIcon className="h-4 w-4" />
                 </label>
@@ -182,11 +177,12 @@ export default function FormDialog({selectedRows, disabled, tenants, templates, 
                   name="status"
                   type="radio"
                   value="collectable"
-                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  defaultChecked={state.formData?.status === 'collectable'}
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2 peer"
                 />
                 <label
                   htmlFor="collectable"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-500 peer-checked:bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Collectable <CheckIcon className="h-4 w-4" />
                 </label>
