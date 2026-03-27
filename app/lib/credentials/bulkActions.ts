@@ -19,7 +19,7 @@ const FormSchema = z.object({
     invalid_type_error: 'Please select a tag.',
   }).refine(val => val !== 'select', {message: 'Please select a tag.'}),
   status: z.enum(['hidden', 'collectable'], {
-    invalid_type_error: 'Please select a status.',
+    invalid_type_error: 'Please select a status.'
   }),
 });
 

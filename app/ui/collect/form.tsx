@@ -239,7 +239,6 @@ function LCWCollection({deepLink}:any) {
       </div>
       <div className="max-w-[900px] text-left text-sm md:text-base font-medium">
       If you are viewing this page on a computer screen, scan this QR from your phone camera:
-
       </div>
       <div className="mt-6 mb-5 flex justify-center align-middle">
         <div style={{ height: "auto", margin: "0 auto", maxWidth: 128, width: "100%" }}>

@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Credential, Tag, Template, Tenant } from '@/app/lib/definitions';
+import { Tag, Template, Tenant } from '@/app/lib/definitions';
 
 import {
   CheckIcon,
@@ -15,7 +15,7 @@ import {
   EyeSlashIcon
 } from '@heroicons/react/24/outline';
 
-export default function FormDialog({selectedRows, disabled, tenants, templates, tags}:{selectedRows:any, disabled: boolean, templates: Template[], tenants: Tenant[], tags: Tag[]}) {
+export default function EditSelectedModal({selectedRows, disabled, tenants, templates, tags}:{selectedRows:any, disabled: boolean, templates: Template[], tenants: Tenant[], tags: Tag[]}) {
 
     const [open, setOpen] = React.useState(false);
   const initialState: State = { message: null, errors: {}, formData: {tenantId: 'select', templateId: 'select', tagId: 'select', status: undefined}   };
