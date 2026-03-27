@@ -128,7 +128,6 @@ export default function Form({ templates, tenants, tags }: { templates: Template
             <label htmlFor="tag-id" className="mb-2 block text-sm font-medium">
               Choose a tag (to group with other credentials) 
             </label>
-            <div >Create New Tag</div>
           </div>
           <div className="relative">
             <select
@@ -165,7 +164,7 @@ export default function Form({ templates, tenants, tags }: { templates: Template
  {/* Credential Name */}
         <div className="mb-4">
           <label htmlFor="credName" className="mb-2 block text-sm font-medium">
-            Provide a short description (to later find this credential)
+            Provide a short description (for internal use)
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -191,6 +190,61 @@ export default function Form({ templates, tenants, tags }: { templates: Template
           </div>
         </div>
 
+        {/* Valid From */}
+        <div className="mb-4">
+          <label htmlFor="validFrom" className="mb-2 block text-sm font-medium">
+            Valid From - the date from which point onwards the credential is considered valid
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="validFrom"
+                name="validFrom"
+                type="date"
+                defaultValue={state.formData?.validFrom}
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="validFrom-error"
+              />
+              <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+               <div id="validFrom-error" aria-live="polite" aria-atomic="true">
+                {state.errors?.validFrom &&
+                  state.errors.validFrom.map((error: string) => (
+                    <p className="mt-2 text-sm text-red-500" key={error}>
+                      {error}
+                    </p>
+                  ))}
+                </div>
+          </div>
+        </div>
+
+          {/* Valid Until */}
+        <div className="mb-4">
+          <label htmlFor="validUntil" className="mb-2 block text-sm font-medium">
+            Valid Until - the expiry date
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="validUntil"
+                name="validUntil"
+                type="date"
+                defaultValue={state.formData?.validUntil}
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="validUntil-error"
+              />
+              <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+               <div id="validUntil-error" aria-live="polite" aria-atomic="true">
+                {state.errors?.validUntil &&
+                  state.errors.validUntil.map((error: string) => (
+                    <p className="mt-2 text-sm text-red-500" key={error}>
+                      {error}
+                    </p>
+                  ))}
+                </div>
+          </div>
+        </div>
 
         {/* Holder Name */}
         <div className="mb-4">
@@ -222,6 +276,8 @@ export default function Form({ templates, tenants, tags }: { templates: Template
                 </div>
           </div>
         </div>
+
+
 
         {/* Holder email address */}
         <div className="mb-4">
