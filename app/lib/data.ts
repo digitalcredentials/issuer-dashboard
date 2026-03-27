@@ -113,6 +113,16 @@ export async function fetchTagById(id: string) {
   }
 }
 
+export async function fetchTenantById(id: string) {
+  try {
+    const tenant = await callStore(`tenant/${id}`, 'GET');
+    return tenant;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch tenant.');
+  }
+}
+
 export async function fetchHolderCredsById(
   id: string
 ) {
