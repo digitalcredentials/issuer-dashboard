@@ -2,6 +2,15 @@
 
 import { useMemo } from 'react';
 
+//Date Picker Imports - these should just be in your Context Provider
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import EditSelectedModal from './edit-selected-modal';
+import Link from 'next/link';
+import { PencilIcon } from '@heroicons/react/24/outline';
+import { notify } from '@/app/lib/email/notify';
+import NotifySelectedModal from './notify-selected-modal';
+
 //MRT Imports
 import {
   MaterialReactTable,
@@ -24,7 +33,7 @@ import {
 } from '@mui/material';
 
 //Icons Imports
-import { AccountCircle, MailOutline, Send } from '@mui/icons-material';
+import { AccountCircle, MailOutline, MailOutlined, MailOutlineOutlined, Send } from '@mui/icons-material';
 
 import { Credential, Tag, Template, Tenant } from '@/app/lib/definitions';
 
@@ -166,22 +175,19 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
     ),
     
     renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box sx={{ display: 'flex', gap: '1rem',  alignItems: 'center' }}>
         <Tooltip title="Edit">
-           <Link
-      href={`/dashboard/credentials/${row.original.id}/edit`}
-      className="rounded-md border p-2 hover:bg-gray-100"
-    >
-      <PencilIcon className="w-5" />  
-    </Link>
-         {/*  <IconButton onClick={() => table.setEditingRow(row)}>
-            <EditIcon />
-          </IconButton> */}
+          <Link
+            href={`/dashboard/credentials/${row.original.id}/edit`}
+            className="rounded-md border p-2 w-10 h-10 hover:bg-gray-100"
+          >
+            <PencilIcon className="w-5 h-5" />  
+          </Link>
         </Tooltip>
         <Tooltip title="Notify">
-          <IconButton  onClick={() => notify(row.original.id) }>
-            <MailOutline />
-          </IconButton>
+          <div  className="rounded-md border w-10 h-10 p-2 hover:bg-gray-100" onClick={() => notify(row.original.id) }>
+            <MailOutlined />
+          </div>
         </Tooltip>
       </Box>
     ),
@@ -208,7 +214,7 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
         <ListItemIcon>
           <Send />
         </ListItemIcon>
-        Notify via Email
+        Notify
       </MenuItem>,
     ],
     muiTablePaperProps: {
@@ -220,12 +226,6 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
       },
   },
     renderTopToolbar: ({ table }) => {
-
-      const handleContact = () => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          alert('contact ' + row.getValue('name'));
-        });
-      };
 
       return (
         <Box
@@ -244,7 +244,7 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
           </Box>
           <Box>
             <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-              <FormDialog 
+              <EditSelectedModal 
                 disabled={!table.getIsSomeRowsSelected()}
                 selectedRows={table.getSelectedRowModel().flatRows as any}
                 tenants={tenants}
@@ -252,14 +252,11 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
                 tags={tags}
               />
 
-              <Button
-                
+              <NotifySelectedModal 
                 disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleContact}
-                variant="outlined"
-              >
-                Notify Selected
-              </Button>
+                selectedRows={table.getSelectedRowModel().flatRows as any}
+              />
+
             </Box>
           </Box>
         </Box>
@@ -270,13 +267,6 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
   return <MaterialReactTable table={table} />;
 };
 
-//Date Picker Imports - these should just be in your Context Provider
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import FormDialog from './edit-selected-modal';
-import Link from 'next/link';
-import { PencilIcon } from '@heroicons/react/24/outline';
-import { notify } from '@/app/lib/email/notify';
 
 const CredentialGrid = ({data, tenants, templates, tags}:{data:any, templates: Template[], tenants: Tenant[], tags: Tag[]}) => (
   //App.tsx or AppProviders file
