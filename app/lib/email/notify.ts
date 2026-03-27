@@ -5,9 +5,18 @@ import { getPopulatedEmail } from './getPopulatedEmail';
 import { addNotification, fetchCredentialById } from '../data';
 const appHost = process.env.APP_HOST
 
+
+export async function notifyAll(credentialIds:string[]) {
+  try {
+    const promises = credentialIds.map(credentialId => notify(credentialId));
+    const results = await Promise.all(promises);
+  } catch (e) {
+    console.log("something went askew")
+  }
+}
+
 export async function notify(credentialId:string) { 
   try {
-
   const {credential, holder} = await fetchCredentialById(credentialId);
   const pickupToken = await addNotification(credential.id,holder)
     const collectionPageURL = `${appHost}/collect?pickup_token=${pickupToken}`
