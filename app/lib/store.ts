@@ -1,15 +1,16 @@
 'use server';
-import { Holder, Tag } from "./definitions";
+import { Holder, Tag, Tenant } from "./definitions";
 type queryBody = {queryTerm:string,currentPage?:number};
-type credBody = {holder_id:string,cred_template_id:string,cred_name: string, tenant_id: string, status: string, tag_id: string,added_by?: string}
+type credBody = {holder_id:string,cred_template_id:string,cred_name: string, tenant_id: string, status: string, tag_id: string, valid_from: string | null, valid_until: string | null, added_by?: string}
 type bulkCredUpdateBody = {cred_ids:string,cred_template_id:string,status: string, tenant_id: string, tag_id: string,updated_by?: string}
 
 type tagBody = {tag: Tag}
+type tenantBody = {tenant: Tenant}
 type holderBody = {added_by:string, holder: Holder} //{name:string, email:string, did: string, org_id: string}
 type holdersBody = {added_by:string, holders: Holder[]}
 type notificationBody = {credential_id:string, email:string}
 type emailBody = string[]
-type storeBody = queryBody | credBody | holderBody | notificationBody | emailBody | holdersBody | bulkCredUpdateBody | tagBody
+type storeBody = queryBody | credBody | holderBody | notificationBody | emailBody | holdersBody | bulkCredUpdateBody | tagBody | tenantBody
 
 export const callStore = async (path : string, method: string, body?: storeBody) => {
   try {
