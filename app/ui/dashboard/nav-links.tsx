@@ -19,6 +19,11 @@ const links = [
     icon: DocumentDuplicateIcon,
   },
   {
+    name: 'Tenants',
+    href: '/dashboard/tenants',
+    icon: DocumentDuplicateIcon,
+  },
+  {
     name: 'Templates',
     href: '/dashboard/templates',
     icon: DocumentDuplicateIcon,
