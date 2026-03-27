@@ -26,10 +26,18 @@ const FormSchema = z.object({
   }),
   credName: z.string().trim().min(1, { message: "A credential description is required" }),
   holderId: z.string().trim().min(1, { message: "You must select a holder" }),
+  validFrom: z.preprocess(
+  (val) => (val === '' ? null : val),
+   z.string().date("Your date must be a valid format").nullable()
+),
+  validUntil: z.preprocess(
+  (val) => (val === '' ? null : val),
+   z.string().date("Your date must be a valid format").nullable()
+)
+
 });
 
-const CreateCredential = FormSchema.omit({ id: true });
-const UpdateCredential = FormSchema.omit({ id: true });
+const CredentialSchema = FormSchema.omit({ id: true });
 
 export type State = {
   errors?: {
@@ -39,7 +47,10 @@ export type State = {
     tagId?: string[];
     status?: string[];
     credName?: string[];
+    validFrom?: string[];
+    validUntil?: string[];
   };
+
   message?: string | null;
   formData: {
     credName: string | undefined;
@@ -48,6 +59,8 @@ export type State = {
     tagId: string | undefined;
     status: string | undefined;
     holderId: string | undefined;
+    validFrom: string | undefined ;
+    validUntil: string | undefined ;
   }
 
 };
@@ -69,26 +82,28 @@ export async function createCredential(prevState: State, formData: FormData) : P
     credName: formData.get('credName'),
     status: formData.get('status'),
     holderId: formData.get('holderId'),
+    validFrom: formData.get('validFrom'),
+    validUntil: formData.get('validUntil')
   }
-  const validatedFields = CreateCredential.safeParse(incomingFormValues);
+  const validatedFields = CredentialSchema.safeParse(incomingFormValues);
 
-
-  // If form validation fails, return errors early. Otherwise, continue.
+  
+  // If form validation fails, return errors. Otherwise, continue.
   if (!validatedFields.success) {
-    return {
+    const returnedDAta = {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Create Credential.',
       formData: incomingFormValues
     };
+    return returnedDAta
   }
 
-  // Prepare data for insertion into the database
-  const { templateId, credName, holderId, tenantId, tagId, status } = validatedFields.data;
+  const { templateId, credName, holderId, tenantId, tagId, status, validFrom, validUntil } = validatedFields.data;
   // TODO: want to directly deal with 404's using notFound()
   try {
     // TODO the credType will be used to pick a vc template, populate it, and that populated template will be saved here to the store.
     // TODO move this into the data file
-    const result = await callStore('credential', 'POST', { holder_id: holderId, cred_name: credName, cred_template_id: templateId, tenant_id: tenantId, tag_id: tagId, status, added_by: userName })
+    const result = await callStore('credential', 'POST', { holder_id: holderId, cred_name: credName, cred_template_id: templateId, tenant_id: tenantId, tag_id: tagId, status, valid_from: validFrom, valid_until: validUntil, added_by: userName })
 
   } catch (error) {
     // We'll also log the error to the console for now
@@ -115,8 +130,10 @@ export async function updateCredential (
     credName: formData.get('credName'),
     status: formData.get('status'),
     holderId: formData.get('holderId'),
+    validFrom: formData.get('validFrom'),
+    validUntil: formData.get('validUntil')
   }
-  const validatedFields = UpdateCredential.safeParse(incomingFormValues);
+  const validatedFields = CredentialSchema.safeParse(incomingFormValues);
 
   if (!validatedFields.success) {
     return {
@@ -126,11 +143,10 @@ export async function updateCredential (
     };
   }
 
-  const { templateId, credName, holderId, tenantId, tagId, status } = validatedFields.data;
+  const { templateId, credName, holderId, tenantId, tagId, validFrom, validUntil, status } = validatedFields.data;
 
   try {
-
-    const result = await callStore(`credential/${id}`, 'PUT', { holder_id: holderId, cred_template_id: templateId, tenant_id: tenantId, tag_id: tagId, cred_name: credName, status })
+    const result = await callStore(`credential/${id}`, 'PUT', { holder_id: holderId, cred_template_id: templateId, tenant_id: tenantId, tag_id: tagId, cred_name: credName, valid_from: validFrom, valid_until: validUntil, status })
   } catch (error) {
     return { message: 'Database Error: Failed to pdate credential.' };
   }
@@ -140,13 +156,9 @@ export async function updateCredential (
 }
 
 
-
-
-
 export async function deleteCredential(id: string) {
   // TODO: not sure if we even want to allow deletions
   throw new Error('Deletion not allowed');
-
   // revalidatePath('/dashboard/credentials');
 }
 
