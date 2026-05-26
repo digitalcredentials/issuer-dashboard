@@ -28,11 +28,11 @@ const FormSchema = z.object({
   holderId: z.string().trim().min(1, { message: "You must select a holder" }),
   validFrom: z.preprocess(
   (val) => (val === '' ? null : val),
-   z.string().date("Your date must be a valid format").nullable()
+   z.string().date("Your date must be a valid format - YYYY-MM-DD").nullable()
 ),
   validUntil: z.preprocess(
   (val) => (val === '' ? null : val),
-   z.string().date("Your date must be a valid format").nullable()
+   z.string().date("Your date must be a valid format - YYYY-MM-DD").nullable()
 )
 
 });

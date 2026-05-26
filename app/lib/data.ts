@@ -6,6 +6,8 @@ import { callStore } from './store';
 export async function fetchReportData() {
   try {
     const data = await callStore('report','GET');
+    console.log("the report data:")
+    console.log(data)
     return data;
   } catch (error) {
     console.error('Database Error:', error);

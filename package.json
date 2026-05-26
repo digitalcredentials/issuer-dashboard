@@ -6,7 +6,10 @@
     "build": "next build",
     "dev": "next dev --turbopack",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -36,11 +39,13 @@
     "zod": "^3.25.17"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "22.10.7",
     "@types/nodemailer": "^7.0.10",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
+    "dotenv": "^17.4.2",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.6"
   },

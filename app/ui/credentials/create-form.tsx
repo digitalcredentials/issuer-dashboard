@@ -17,7 +17,7 @@ import ClientPortal from '../utils/clientPortal';
 import HolderLookupModal from '../holders/HolderLookupModal';
 
 export default function Form({ templates, tenants, tags }: { templates: Template[], tenants: Tenant[], tags: Tag[] }) {
-  const initialState: State = { message: null, errors: {}, formData: {credName: undefined, tenantId: 'select', holderId: undefined, status: undefined, templateId: 'select', tagId: 'select'}   };
+  const initialState: State = { message: null, errors: {}, formData: {credName: undefined, tenantId: 'select', holderId: undefined, status: undefined, templateId: 'select', tagId: 'select', validFrom: undefined, validUntil: undefined}   };
   const [state, formAction] = useActionState(createCredential, initialState);
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [holder, setHolder] = useState({name:'', did: '', org_id: '', email: '', id: undefined})

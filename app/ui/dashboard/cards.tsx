@@ -3,13 +3,14 @@ import {
   ArchiveBoxXMarkIcon,
   InboxIcon,
   ArchiveBoxArrowDownIcon,
+  EyeSlashIcon,
 } from "@heroicons/react/24/outline";
 import { lusitana } from "@/app/ui/fonts";
 
 const iconMap = {
   collected: ArchiveBoxArrowDownIcon,
   notified: ArchiveBoxXMarkIcon,
-  pending: ClockIcon,
+  hidden: EyeSlashIcon,
   creds: InboxIcon,
 };
 
@@ -17,18 +18,20 @@ export default async function CardWrapper({reportData}: any) {
   
   const {
     totalCredentials,
-    byStatus: {pending, notified, collected}
+    byStatus: {hidden},
+    totalNotified, 
+    totalCollected
   } = reportData;
 
   return (
     <>
       <Card title="Total Credentials" value={totalCredentials} type="creds" />
 
-      <Card title="Pending" value={pending} type="pending" />
+      <Card title="Hidden" value={hidden} type="hidden" />
 
-      <Card title="Notified" value={notified} type="notified" />
+      <Card title="Notified" value={totalNotified} type="notified" />
 
-      <Card title="Collected" value={collected} type="collected" />
+      <Card title="Collected" value={totalCollected} type="collected" />
     </>
   );
 }
@@ -40,7 +43,7 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: "creds" | "notified" | "pending" | "collected";
+  type: "creds" | "notified" | "hidden" | "collected";
 }) {
   const Icon = iconMap[type];
 

@@ -46,7 +46,6 @@ export type State = {
     message?: string | null;
     existingList: any;
     duplicateList: any;
-    fieldErrors: any;
   };
   formData: {
     csv: File | undefined;
