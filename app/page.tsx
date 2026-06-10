@@ -1,8 +1,23 @@
 import DCCLogo from '@/app/ui/dcc-logo';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowRightIcon,
+  DocumentDuplicateIcon,
+  ChartBarIcon,
+  TagIcon,
+  BuildingOfficeIcon,
+  UserGroupIcon,
+} from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
+
+const categories = [
+  { name: 'Credentials', href: '/dashboard/credentials', icon: DocumentDuplicateIcon },
+  { name: 'Reports', href: '/dashboard/reports', icon: ChartBarIcon },
+  { name: 'Tags', href: '/dashboard/tags', icon: TagIcon },
+  { name: 'Tenants', href: '/dashboard/tenants', icon: BuildingOfficeIcon },
+  { name: 'Users', href: '/dashboard/users', icon: UserGroupIcon },
+];
 
 export default function Page() {
   return (
@@ -47,6 +62,18 @@ export default function Page() {
         alt="Screenshot of the dashboard project showing mobile version"
       />
         </div>
+      </div>
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {categories.map(({ name, href, icon: Icon }) => (
+          <Link
+            key={name}
+            href={href}
+            className="flex flex-col items-center justify-center gap-3 rounded-lg bg-gray-50 p-6 text-gray-700 transition-colors hover:bg-sky-100 hover:text-blue-600"
+          >
+            <Icon className="w-10 h-10" />
+            <span className="text-sm font-medium">{name}</span>
+          </Link>
+        ))}
       </div>
     </main>
   );
