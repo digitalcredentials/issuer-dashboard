@@ -1,23 +1,27 @@
 import Form from '@/app/ui/credentials/create-form';
 import Breadcrumbs from '@/app/ui/credentials/breadcrumbs';
-import { fetchAllTemplates } from '@/app/lib/data';
+import { fetchAllTemplates, fetchAllTenants, fetchAllTags } from '@/app/lib/data';
  
 export default async function Page() {
-  const templates = await fetchAllTemplates();
- 
+  const [templates, tenants, tags] = await Promise.all([
+    fetchAllTemplates(),
+    fetchAllTenants(),
+    fetchAllTags()
+  ])
+
   return (
     <main>
       <Breadcrumbs
         breadcrumbs={[
           { label: 'Credentials', href: '/dashboard/credentials' },
           {
-            label: 'Create Credential',
-            href: '/dashboard/credentials/create',
+            label: 'Add Credential',
+            href: '/dashboard/credentials/add',
             active: true,
           },
         ]}
       />
-      <Form templates={templates} />
+      <Form templates={templates} tenants={tenants} tags={tags} />
     </main>
   );
 }

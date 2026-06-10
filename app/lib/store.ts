@@ -1,17 +1,26 @@
 'use server';
+import { Holder, Tag, Tenant } from "./definitions";
+
+const storeHost = process.env.STORE_HOST
 
 type queryBody = {queryTerm:string,currentPage?:number};
-type credBody = {holder_name:string,holder_email:string,cred_name: string, added_by?: string}
-type storeBody = queryBody | credBody
+type credBody = {holder_id:string,cred_template_id:string,cred_name: string, tenant_id: string, status: string, tag_id: string, valid_from: string | null, valid_until: string | null, added_by?: string}
+type bulkCredUpdateBody = {cred_ids:string,cred_template_id:string,status: string, tenant_id: string, tag_id: string,updated_by?: string}
+type multiCredBody = {credentials:credBody[], added_by?: string}
+type tagBody = {tag: Tag}
+type tenantBody = {tenant: Tenant}
+type holderBody = {added_by:string, holder: Holder} //{name:string, email:string, did: string, org_id: string}
+type holdersBody = {added_by:string, holders: Holder[]}
+type notificationBody = {credential_id:string, email:string}
+type emailBody = string[]
+type storeBody = queryBody | credBody | multiCredBody | holderBody | notificationBody | emailBody | holdersBody | bulkCredUpdateBody | tagBody | tenantBody
 
 export const callStore = async (path : string, method: string, body?: storeBody) => {
-    console.log("the url:")
-    console.log(path)
   try {
     const response = (method === 'GET') ?
-        await fetch(`http://localhost:3000/${path}`)
+        await fetch(`${storeHost}/${path}`)
         :
-       await fetch(`http://localhost:3000/${path}`,
+       await fetch(`${storeHost}/${path}`,
         {
           method, 
           headers: {'Content-Type': 'application/json'},
@@ -23,7 +32,6 @@ export const callStore = async (path : string, method: string, body?: storeBody)
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json(); 
-    console.log(data);
     return data;
   } catch (error) {
     console.error('Fetch error:', error);

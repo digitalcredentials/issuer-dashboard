@@ -17,7 +17,9 @@ export type Credential = {
   id: string;
   holder_id: string;
   date: string;
-  status: 'pending' | 'collected' | 'pending' | 'notified' | 'deactivated';
+  status: 'collectable' | 'hidden';
+  date_added?: string;
+  tenant_issuer_name?: string;
 };
 
 export type CredsByMonth = {
@@ -38,7 +40,7 @@ export type CredentialsTable = {
   email: string;
   image_url: string;
   date: string;
-  status: 'pending' | 'collected' | 'pending' | 'notified' | 'deactivated';
+  status: 'collectable' | 'hidden';
 };
 
 export type TemplatesTableType = {
@@ -59,10 +61,24 @@ export type FormattedTemplatesTable = {
   image_url: string;
 };
 
-export type TemplateField = {
-  id: string;
+export type Tenant = {
+  id?: string;
   name: string;
-};
+  description: string;
+  email: string;
+  issuer_name: string;
+  issuer_url: string;
+  issuer_image_url: string;
+  env_name: string;
+  is_active: boolean;
+}
+
+export type Tag = {
+  date_added?: string;
+  id?: string;
+  name: string;
+  description: string;
+}
 
 export type CredentialForm = {
   id: string;
@@ -71,4 +87,12 @@ export type CredentialForm = {
   holder_name: string;
   holder_email: string;
   status: 'pending' | 'collected' | 'pending' | 'notified' | 'deactivated';
+};
+
+export type Holder = {
+  id?: string;
+  org_id: string;
+  name: string;
+  email: string;
+  did: string;
 };

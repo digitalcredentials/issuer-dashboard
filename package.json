@@ -1,35 +1,51 @@
 {
- "name": "@digitalcredentials/issuer-dashboard",
- "description": "A nextjs app for managing Verifiable Credential issuance, revocation, and reporting.",
+  "name": "@digitalcredentials/issuer-dashboard",
+  "description": "A nextjs app for managing Verifiable Credential issuance, revocation, and reporting.",
   "version": "0.0.1",
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbopack",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fast-csv/parse": "^5.0.5",
     "@heroicons/react": "^2.2.0",
+    "@mui/icons-material": "^7.3.9",
+    "@mui/material": "^7.3.9",
+    "@mui/x-date-pickers": "^8.27.2",
     "@tailwindcss/forms": "^0.5.10",
     "autoprefixer": "10.4.20",
     "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.20",
+    "material-react-table": "^3.2.1",
     "next": "latest",
     "next-auth": "5.0.0-beta.30",
+    "nodemailer": "^8.0.1",
     "postcss": "8.5.1",
     "postgres": "^3.4.6",
     "react": "latest",
     "react-dom": "latest",
+    "react-qr-code": "^2.0.18",
     "tailwindcss": "3.4.17",
     "typescript": "5.7.3",
     "use-debounce": "^10.0.4",
     "zod": "^3.25.17"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "22.10.7",
+    "@types/nodemailer": "^7.0.10",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
+    "dotenv": "^17.4.2",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.6"
   },
@@ -40,7 +56,7 @@
     ]
   },
   "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67",
-    "keywords": [
+  "keywords": [
     "dcc"
   ],
   "engines": {

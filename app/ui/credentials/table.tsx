@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { UpdateCredential, DeleteCredential } from '@/app/ui/credentials/buttons';
+import { UpdateCredential, DeleteCredential, Notify } from '@/app/ui/credentials/buttons';
 import CredentialStatus from '@/app/ui/credentials/status';
 import { formatDateToLocal } from '@/app/lib/utils';
 import { fetchFilteredCredentials } from '@/app/lib/data';
@@ -49,6 +49,7 @@ export default async function CredentialsTable({
                   <div className="flex justify-end gap-2">
                     <UpdateCredential id={credential.id} />
                     <DeleteCredential id={credential.id} />
+                    <Notify id={credential.id} />
                   </div>
                 </div>
               </div>
@@ -111,6 +112,7 @@ export default async function CredentialsTable({
                     <div className="flex justify-end gap-3">
                       <UpdateCredential id={credential.id} />
                       <DeleteCredential id={credential.id} />
+                      <Notify id={credential.id} />
                     </div>
                   </td>
                 </tr>

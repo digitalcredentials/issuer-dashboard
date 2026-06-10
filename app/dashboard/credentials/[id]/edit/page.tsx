@@ -1,17 +1,19 @@
 import Form from '@/app/ui/credentials/edit-form';
 import Breadcrumbs from '@/app/ui/credentials/breadcrumbs';
-import { fetchCredentialById, fetchAllTemplates } from '@/app/lib/data';
+import { fetchCredentialById, fetchAllTemplates, fetchAllTenants, fetchAllTags } from '@/app/lib/data';
  import { notFound } from 'next/navigation';
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
-  const [credential, templates] = await Promise.all([
+  const [credentialResult, templates, tenants, tags] = await Promise.all([
     fetchCredentialById(id),
     fetchAllTemplates(),
+    fetchAllTenants(),
+    fetchAllTags()
   ]);
 
-    if (!credential) {
+    if (!credentialResult) {
     notFound();
   }
 
@@ -27,7 +29,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           },
         ]}
       />
-      <Form credential={credential} templates={templates} />
+      <Form credentialResult={credentialResult} templates={templates} tenants={tenants} tags={tags}/>
     </main>
   );
 }
