@@ -4,6 +4,7 @@ import {
   UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -37,6 +38,11 @@ const links = [
     name: 'Tags',
     href: '/dashboard/tags',
     icon: UserGroupIcon,
+  },
+  {
+    name: 'Reports',
+    href: '/dashboard/reports',
+    icon: ChartBarIcon,
   },
   //{ name: 'Credential Settings', href: '/dashboard/configuration', icon: UserGroupIcon },
  // { name: 'Email Settings', href: '/dashboard/email', icon: UserGroupIcon },
