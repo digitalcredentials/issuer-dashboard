@@ -9,7 +9,8 @@ export type User = {
 export type Template = {
   id: string;
   name: string;
-  email: string;
+  description: string;
+  template_json: string;
   image_url: string;
 };
 
