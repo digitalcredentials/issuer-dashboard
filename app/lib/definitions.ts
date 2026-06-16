@@ -15,6 +15,8 @@ export type Template = {
 };
 
 export type Credential = {
+  valid_from: string;
+  valid_until: string;
   id: string;
   holder_id: string;
   date: string;
