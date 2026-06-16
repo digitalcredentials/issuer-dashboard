@@ -16,7 +16,8 @@ const FormSchema = z.object({
   templateId: z.string({invalid_type_error: 'Please select a credential type.'}),
   tenantId: z.string({ invalid_type_error: 'Please select an issuer.'}),
   batchName: z.string().trim().min(1, { message: "A batch name is required" }),
-  tag: z.string().trim().min(1, { message: "A tag is required" }),
+  description: z.string().trim().min(1, { message: "A batch description is required" }),
+  tagId: z.string().trim().min(1, { message: "A tag is required" }),
   status: z.enum(['hidden', 'collectable'], {
     invalid_type_error: 'Please select a status.',
   }),
@@ -47,10 +48,10 @@ const FormSchema = z.object({
 
 // zod schema object for each csv row
 const CsvSchema = z.object({
-  name: z.string().trim().min(1, { message: "A holder name is required" }),
+//  name: z.string().trim().min(1, { message: "A holder name is required" }),
   email: z.string().email().trim().min(1, { message: "A valid email is required" }),
-  did: z.string({invalid_type_error: 'The holderDID must be a string.'}),
-  org_id: z.string({invalid_type_error: 'The holderOrgId must be a string.'})
+ // did: z.string({invalid_type_error: 'The holderDID must be a string.'}),
+ //org_id: z.string({invalid_type_error: 'The holderOrgId must be a string.'})
 });
 
 
@@ -62,22 +63,24 @@ export type State = {
       tenantId?: string[];
       csv?: string[];
       batchName?: string[];
+      description?: string[];
       validFrom?: string[];
       validUntil?: string[];
       status?: string[];
-      tag?: string[];
+      tagId?: string[];
     },
     missingEmails?: string[]
   };
   message?: string | null;
   formData: {
     batchName: string | undefined;
+    description: string | undefined;
     tenantId: string | undefined;
     templateId: string | undefined;
     validFrom: string | undefined;
     validUntil: string | undefined;
     status: string | undefined;
-    tag: string | undefined;
+    tagId: string | undefined;
     csv: File | undefined;
   },
   
@@ -100,9 +103,9 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
     templateId: formData.get('templateId'),
     tenantId: formData.get('tenantId'),
     batchName: formData.get('batchName'),
+    description: formData.get('description'),
     csv: formData.get('csv'),
-    NEED TO ADD ALL THE rest of these FIELDS TO THE FORM: (copy from the add single creential page)
-    tag: formData.get('tag'),
+    tagId: formData.get('tagId'),
     validFrom: formData.get('validFrom'),
     validUntil: formData.get('validUntil'),
     status: formData.get('status')
@@ -113,7 +116,7 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
     // If form validation fails, return errors. Otherwise, continue.
   if (!formValidationResult.success) {
     console.log("there were errors:", formValidationResult.error.flatten().fieldErrors);
-    return {
+    const errors =  {
       errors: {
         errorType: 'form',
         formErrors: formValidationResult.error.flatten().fieldErrors,
@@ -121,9 +124,11 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
       },
       formData: incomingFormValues
     };
+    console.log(errors)
+    return errors;
   }
 
-  const { templateId, batchName, csv, tenantId, tag, validFrom, status, validUntil } = formValidationResult.data;
+  const { templateId, batchName, csv, tenantId, tagId, validFrom, status, validUntil, description } = formValidationResult.data;
   const uploadedRows:any[] = [];
   const rowErrors:any[] = [];
   let credentials;
@@ -160,6 +165,7 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
   
      // check if there were zod errors
      if (rowErrors.length) {
+      console.log("zod errors:", rowErrors)
         return {
           errors: {
             errorType: 'csv-row',
@@ -172,18 +178,19 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
   
       // map holder emails to holder ids
       // collect any emails that don't have a holder id
+      console.log("about to check for missing emails")
     try {
           const missingEmails:string[] = []
-          const holderEmails = uploadedRows.map(row=>row.holder_email)
-          const holderIds = await callStore('holders/ids', 'POST', holderEmails)
+          const holderEmails = uploadedRows.map(row=>row.email)
+          const existingHolders = await callStore('holders/ids', 'POST', holderEmails)
 
           credentials = uploadedRows.map((credRow:any)=>{
-              const holderId = holderIds.find((idRow:any)=>idRow.email === credRow.holder_email);
-              if (!holderId) {
-                missingEmails.push(credRow.holder_email);
+              const existingHolder = existingHolders.find((idRow:any)=>idRow.email === credRow.email);
+              if (!existingHolder) {
+                missingEmails.push(credRow.email);
                 return null;
               } else {
-                return {...credRow, holder_id: holderId}
+                return {...credRow, holder_id: existingHolder.id}
               }
           })
 
@@ -209,9 +216,10 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
   
     // Finally, upload the credentials to the store
     try {
-      const data = {credentials, added_by: userName}
+      const data = {credentials, added_by: userName, csv, valid_from: validFrom, valid_until: validUntil, status, tag_id: tagId, template_id: templateId, tenant_id: tenantId, batch_name: batchName, description}
       console.log("about to call the store:")
-      const result = await callStore('credentials', 'POST', data)
+      console.log(JSON.stringify(data, null, 2))
+      const result = await callStore('batch', 'POST', data)
       return {
           success: 'Your credentials have been added.',
           formData: incomingFormValues
@@ -238,7 +246,7 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
 
 
 
-  Readable.fromWeb(csv.stream() as any)
+  /* Readable.fromWeb(csv.stream() as any)
     .pipe(fastcsv.parse({ headers: true }))
     .on('error', error => console.error(error))
     .on('data', row => processRow(row))
@@ -254,7 +262,7 @@ export async function uploadBatch(prevState: State, formData: FormData) : Promis
     return {
       message: 'Database Error: Failed to upload credentials.',
     };
-  }
+  } */
 
   revalidatePath('/dashboard/credentials');
   redirect('/dashboard/credentials');

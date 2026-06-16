@@ -9,11 +9,14 @@ export type User = {
 export type Template = {
   id: string;
   name: string;
-  email: string;
+  description: string;
+  template_json: string;
   image_url: string;
 };
 
 export type Credential = {
+  valid_from: string;
+  valid_until: string;
   id: string;
   holder_id: string;
   date: string;

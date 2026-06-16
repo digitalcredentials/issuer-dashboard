@@ -1,12 +1,14 @@
 import Form from '@/app/ui/credentials/upload-form';
 import Breadcrumbs from '@/app/ui/credentials/breadcrumbs';
-import { fetchAllTemplates, fetchAllTenants } from '@/app/lib/data';
+import { fetchAllTags, fetchAllTemplates, fetchAllTenants } from '@/app/lib/data';
  
 export default async function Page() {
-  const [templates, tenants] = await Promise.all([
-    fetchAllTemplates(),
-    fetchAllTenants()
-  ])
+
+   const [templates, tenants, tags] = await Promise.all([
+      fetchAllTemplates(),
+      fetchAllTenants(),
+      fetchAllTags()
+    ])
 
   return (
     <main>
@@ -16,7 +18,7 @@ export default async function Page() {
           { label: 'Upload Credential Batch', href: '/dashboard/credentials/upload', active: true, }
         ]}
       />
-      <Form templates={templates} tenants={tenants} />
+      <Form templates={templates} tenants={tenants} tags={tags} />
     </main>
   );
 }
