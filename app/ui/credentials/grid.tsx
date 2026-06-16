@@ -78,13 +78,13 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
             size: 50,
           },  
           {
-            accessorKey: 'template_name', //hey a simple column for once
+            accessorKey: 'template_name', 
             header: 'Template',
             filterVariant: 'select',
             size: 200,
           },
           {
-            accessorKey: 'tenant_issuer_name', //hey a simple column for once
+            accessorKey: 'tenant_issuer_name', 
             header: 'Tenant',
             filterVariant: 'select',
             size: 300,
@@ -95,7 +95,37 @@ const Grid = ({data, tenants, templates, tags}:{data:Credential[], templates: Te
             filterVariant: 'autocomplete',
             header: 'Email',
             size: 150,
-          },  
+          },   
+          {
+            accessorFn: (row) => new Date(row.valid_from as string), //convert to Date for sorting and filtering
+            id: 'valid_from',
+            header: 'Valid From',
+            filterVariant: 'date',
+            filterFn: 'lessThan',
+            sortingFn: 'datetime',
+            Cell: ({ cell }) => cell.getValue<Date>()?.toLocaleDateString(), //render Date as a string
+            Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup
+            muiFilterTextFieldProps: {
+              sx: {
+                minWidth: '250px',
+              },
+            },
+          }, 
+          {
+            accessorFn: (row) => new Date(row.date_added as string), //convert to Date for sorting and filtering
+            id: 'valid_until',
+            header: 'Valid Until',
+            filterVariant: 'date',
+            filterFn: 'lessThan',
+            sortingFn: 'datetime',
+            Cell: ({ cell }) => cell.getValue<Date>()?.toLocaleDateString(), //render Date as a string
+            Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup
+            muiFilterTextFieldProps: {
+              sx: {
+                minWidth: '250px',
+              },
+            },
+          },
           {
             accessorFn: (row) => new Date(row.date_added as string), //convert to Date for sorting and filtering
             id: 'date_added',
