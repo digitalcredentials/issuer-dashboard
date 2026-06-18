@@ -190,6 +190,16 @@ export async function fetchAllTags() {
   }
 }
 
+export async function fetchAllHolders() {
+  try {
+    const holders = await callStore(`holders`, 'GET');
+    return holders;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all holders.');
+  }
+}
+
 export async function fetchFilteredTemplates(queryTerm: string) {
   try {
     const response = await callStore('templates/query','POST', {queryTerm});
